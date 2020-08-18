@@ -1,0 +1,980 @@
+*****************************************************************************
+* Annotated by: Minqing Hu and Bing Liu, 2004.
+*		Department of Computer Sicence
+*               University of Illinois at Chicago              
+*
+* Product name: Creative Labs Nomad Jukebox Zen Xtra 40GB
+* Review Source: amazon.com
+*
+* See Readme.txt to find the meaning of each symbol. 
+*****************************************************************************
+
+[t] a quick update to the new zen nx ? 
+##this is an edited review , now that i have had time to use the device . 
+affordability[+3]##while , there are flaws with the machine , the xtra gets five stars because of its affordability . 
+bang-for-the-buck[+3][u]##it is the most bang-for-the-buck out there . 
+size[+2],weight[+2],navigational system[+2], sound[+3]##like it 's predecessor , the quickly revised nx , this player boasts a decent size and weight , a relatively-intuitive navigational system that categorizes based on id3 tags , and excellent sound ( widely known to be better than ipod - not surprising considering the number of years creative has been in the audio peripheral business ) . 
+screen[+3]##the xtra improves upon the zen nx with a larger , now-blue backlit screen , which is infinitely better . 
+##further , the xtra doubles the maximum filecount capacity to 16000 mp3 . 
+##this is especially useful for those who listen mostly to pop music and store all those short ditties . 
+##when compared to the ipod the zen xtra falls short , but only by a bit . 
+##yes the ipod is smaller , but not $ 200 worth , which is the premium you 'll pay for an equivalent capacity model . 
+##yes , the ipod looks in tune with the carefully articulated urban-hipster persona thats become popular as of late , but sure-as-hell is n't worth the $ 200 premium ( unless you are just dying to match your music player with that volkswagen beetle and urban outfitters wardrobe ) . 
+##for me , i 'll save that cash for another purchase . 
+[t] get this player ! 
+##before i decided to get this player , i did my research . 
+##i looked up the ipod , the dell jukebox , and the samsung napster player . 
+deal[+3]##i chose this one because from what i read , it was the best deal for the money . 
+wma file[+2]##another reason i got it is because you can put wma files on it . 
+##that takes up half the space of mp3 's . 
+##that 's important because i have a lot of music . 
+software[+2]##the software is great . 
+##you can sort your music by artist , title , album , or genre , and you can play music based on those categories . 
+software[+2]##transfering is easy , the software makes everythig pretty easy . 
+battery life[+2]##even the battery life is great - it advertises 14 hours , it 's actually a little less but still good . 
+accessory[-1]##only 1 problem , no accessories ... yet . 
+remote[-2]##i hope it 's because it 's new and they are not out yet , but being without a remote is hard . 
+interface[+2]##they player 's interface itself is also very easy to use . 
+##can 't complain and i recommend it over all the other players , just hope that remote will come out soon . 
+player[+3][p]##get it , it 's woth every penny ! ! 
+[t] kick a player 
+##i was a little concerned to be the black sheep buying this player instead of the incredibly overpriced apple i-pod . 
+player[+3][p]##i 've had it for a week now , do n't regret the purchase one bit , and i never leave home without it . 
+##if you have any doubts about this player , well do n't . 
+##pros : 
+software[+2]##software is easy to use ( although redhat software is better , but costs money ) 
+price[+2]##much cheaper than i-pod good looking player ( beautiful blue back-lit screen ) if you 've read about the player , some have complained about the lack of a viewing hole for the face when the case is on , but this is good because the face does n't get damaged / scratched fast transfer rate 
+##no issues as of yet 
+##cons : 
+headphone[-3]##you 're going to need to buy new headphones , the stock ones suck 
+##hopefully , this player will out sell the ridculously over-hyped i-pod . 
+##if you want to be a poser and follow the herd , mooooooh , then buy the i-pod . 
+##otherwise , be smart , save the cash . 
+[t] the sound is the thing ! 
+##for me the sound of the music is what is important . 
+sound[+2]##the zen xtra sounds great with good headphone and well recored mp3s . 
+navigation[-1]##navigation is a bit tricky and takes getting used to but the included pdf instructions cover the operation pretty well . 
+weight[+2]##at 8 ounces it is pretty light but not as light as the ipod . 
+battery[+2],leather case[+2]##the battery is replaceable ( a real plus ) and there is a leather case ( another real plus ) . 
+##i suppose that you could jog with it but it seems to be made for the enjoyment of music . 
+software[+2]##so far the software for the pc works easily . 
+looking[+2]##by the way , it looks nice also . 
+[t] an ipod killer : 
+##this thing kicks mighty apple butt ! 
+##i would have given this thing 4.5 stars but since i can 't , i 'll be sweet and give it the full 5 stars . 
+player[+3][p]##it 's worth it . 
+##i personally do n't like apple or their business practices ( screwing resellers , customers and employees left and right ) so i shopped around for something else . 
+##after finally stumbling upon this zen nx player , i knew i had found what i was looking for . 
+battery life[+2],price[+2]##my two main requirements were longer battery life and lower price : i found both . 
+##this thing lasted well over 14 hours when i played it straight for the first time . 
+##the zen nx is $ 100 cheaper than the ipod of the same size , so you have to wonder just how much apple 's markup is anyway ! 
+sound[+3], headphone[-2]##the sound is excellent , but a tip : get a real pair of headphones . 
+##you wo n't appreciate the quality this thing has to offer unless you are using a good set of cans. 
+control[+2]##the controls are on the side instead of on the front , which i like , because that 's where my thumb is when i hold the thing ! 
+scroll wheel[+2]##the scroll wheel is a big improvement over the ipod touchpad . 
+size[-1]##it could be a little bit bigger , but it 's easy to get used to . 
+screen[-1]##the screen may be a little smaller , but it is very readable and does n't come in the overused blue . 
+firewire[-1]##it does n't have firewire , not a real complaint since most windows users do n't generally have firewire cards themselves . 
+##( i would have appreciated having a firewire plug , however ) 
+leather pouch[+3]##the included leather pouch is a big plus : it actually protects the unit well , something a lot of ' carrying cases ' fail to do with other audio devices . 
+battery[+2],construction[+2],size[+2],weight[+2]##other plusses : changable battery , loads of presets for environments , decent construction , still quite small and light despite being slightly bigger than an ipod . 
+##( did i mention you can actually change the battery ? hello ? apple ? are you listening ? ) 
+##i probably would have liked to have a player in something other than silver / metallic ... like the battery adapters on their usb thumbdrive ( muvo nx ) mp3 player models . 
+##since the front plate is removable to access the battery compartment , aftermarket alternate covers would not be difficult or expensive to make . 
+size[+1][u],sound[+2],price[+2]##overall : small , sounds great , and less expensive than apple 's overpriced ipod ! 
+battery[+2]##( batteries last longer too ! ) 
+[t] way better than a i-pod ! 
+##i shopped around for a month looking for a good mp3 player , and all i heard was how good the i-pod was . 
+##after messing with it at a store i noticed how bad the i-pod was . 
+##it was marked up increadably high compared to other models ( almost $ 500 for a 30gb ) , and theres was nothing about it that made it worth that much money . 
+player[+], price[+3]##the creative labs zen xtra has all the features the i-pod has and if you get if from amazon your only going to pay $ 300 for this great player . 
+player[+3]##i 've had it for about 2 weeks and it 's the best player i 've seen , and used , ever . 
+menu[+2]##the music is easy to get to ( all of the menus are easy to understand despite what alot of i-pod owners say ) and if you know how to search for an artist by name online , then you can do the same with the zen . 
+screen[+2]##the screen is very easy to read and the blue light is bright enough to read at night , but dim enough so it does n't blind you when you stare too long . 
+player[+3],use[+3], software[+2],sound[+3]##all in all this a great player that blows the i-pod away , with easy to use and understand features , software that is simple to understand and use , and a great sound ( which is all that matters in a mp3 player ) . 
+##just get some new headphones and your set . 
+[t] great product for a windows computer . 
+##within 5 minutes i was able to transfer files . 
+program[+3]##it 's a very intuitive program . 
+installation[+2]##i had no problems following their installation instructions . 
+menu[+3]##the menus are very easy to navigate . 
+scroll wheel[-1]##the only complaint i have is that when you push in the scroll wheel to select , you have to push straight in or it sticks . 
+control[+3]##the other controls are all very easy to use . 
+play option[+1]##it has several play options , one of the best is an option to shuffle , based on all or a certain playlist . 
+playlist[-1]##the only downside i see is that it does n't look like you can manage playlists from the nomad , it has to be done from the computer . 
+##unlike the ipod , this is fully windows compatible and can be used right out of the box . 
+##for ipod you have to buy a cable and it is n't compatible with all windows pcs. 
+price[+2][u]##it also costs a lot less than the ipod . 
+earbud[+1]##the earbuds that come with it are n't that bad . 
+earbud[+2][p]##they 're pretty comfortable , stay in place and deliver a decent audio quality . 
+deal[+2]##this is a good deal for music and data storage . 
+[t] the interfacing software is unacceptably bad . 
+##one thing i should note is that i have only had this product for one day , so there are many options i have not explored . 
+software[-2]##the main problem with the nomad jukebox zen xtra 30 gb is the software . 
+##on my relatively new computer ( p4 with windows xp and usb 2.0 ) , the os complained about the installation of the drivers . 
+##despite the instructions insisting that the process was fairly automatic , i had to install the usb drivers and the nomad interface software manually . 
+software[-2]##the interface software itself , which should be user-friendly , was anything but easy-to-use . 
+##with the nomad explorer software , songs should be drag-and-drop . 
+##i have not yet tried the cd-ripping program . 
+player[-2]##the player itself has all sorts of problems . 
+face plate[-1]##the face-plate , which pops out for the battery , pops open by itself every 10 minutes or so . 
+file transfer[-1]##the player hangs up on file transfer every once-in-a-while , prompting a reset . 
+scroll[-1]##the scroll button is overly sensitive at times ; not sensitive enough at others . 
+scroll[-1]##depressing the scroll button ( for selecting ) is not always responsive . 
+scroll[-1]##the scroll bar problems make the task of creating playlists more frustrating . 
+sound[+2]##on the positive side , the sound of the player is pretty good , once you have everything configured . 
+audio[+2]##i have n't had time to really push this player to the limit , but audio aspects on the nomad are satisfactory , as should be expected from creative labs . 
+player[-3]##overall , a very disappointing product . 
+setup[-3],interface[-3]##the setup process for the nomad is infuriating , and the interface with the player is sub-par . 
+player[-2]##the player 's mechanics are also flawed . 
+player[-2]##although the sound-quality is good , it takes more than good sound on a portable-mp 3 player to result in a good product . 
+[t] great player . 
+##i was trying to decide whether or not i should go with the 40 gb ipod or this 30 gb zen xtra . 
+price[+2]##when it came down to it , the price on this player is hard to beat . 
+##if you want the other accessories the ipod offer , maybe that 's where you should go .. . 
+##this is a great investment for someone like me who enjoys music and hates carrying multiple cds . 
+##i just transfered over some 40 cds and have plenty of space left for me . 
+scroll[-1]##one beef is the scroll , it does n't work as well as i 'd like . 
+this thing[+3]##other than that this thing is great ... 
+##enjoy ! 
+[t] replaceable battery lets zennx keep running and running . 
+battery[+2]##zennx 's replaceable battery was the deciding factor in my purchase of zennx over ipod . 
+##all rechargeable batteries lose their holding power over time ( around 2 years ) . 
+##apple 's solution - pay apple another $ 400 + for a new ipod ( less a paltry discount ) . 
+battery[+2]##the zennx will keep running for the price of a replacement battery , just like any other battery-powered appliance . 
+earphone[-1],software[-1]##deficiencies with zennx are easily overcome with 3rd-party earphones ( $ 20 + ) and software ( $ 25 ). 
+##notmad by red chair software is an explorer-based program that enables simple drag-and-drop transfer of music files from pc to zennx . 
+screen[+2],switch[-2]##the blue-screen display in the zennx xtra model is an improvement , but the toggle switch is still tricky . 
+##zennx 's capacity / price ratio on the 30g model ( $ 10/gig ) ) trumps ipod 's 30g model ( $ 14/gig ). 
+##choosing zennx is a no-brainer when factoring in the cost of a new $ 400 + ipod every few years versus the $ 50 cost of replacing zennx 's rechargeable battery . 
+##zennx hopefully will gain market share and prompt arrogant apple to lower prices and enable consumers to replace the battery . 
+##update : apple recently announced that for $ 107 , it will replace the battery in ipods shipped to their factory . 
+##lithium ion rechargeable batteries are good for 300-500 rechargings , so battery lifespan will vary according to your usage . 
+##still , apple continues to squeeze dollars from consumers by not designing the battery to be replaceable . 
+[t] terrific mp3 player , great price . 
+nomad[+3]##i love my new nomad , its great ! 
+##now i dont have to lug around 80 cds if i dont know what i 'm going to want to listen to biking home . 
+look##this thing , while looking pretty cool , is not as sexy as the ipod . 
+price[+3]##for some this might be a problem , but for the price of a 30 gig ipod , you can get a 60gb nomad , the ipod simply pales in comparison . 
+software[+3]##the software is very easy to use , and within 30 minutes of opening my box , i was out and about listening to any one of my 80 cds . 
+case[+2]##the free ( i didnt know they still did that ) carrying case is really protective , and to me its the only accessory you need ( except good headphones ) . 
+headphone[-1], sound[+3]##on the subject of headphones , this thing seems like a normal mp3 player when you use the headphones they give you in the box , but invest 30 dollars in a nice pair and the sound quality goes up through the roof ! 
+##if you want a sexy , cool , accessory-availible mp3 player , by all means , get an ipod for a hundred dollars more ( or one for the same price that holds 1/3 of the music ) . 
+deal[+3], mp3 player[+3]##but if you want a great deal and a great mp3 player , get the nomad . 
+player[+3][u]##best electronic i 've bought since i was born . 
+##flat out 
+[t] impressed ! 
+##i just sold my archos 20gb jukebox recorder after not being satisfied with it 's slow loading & difficult navigation , not to mention it froze quite a bit . 
+##i was in search of a new item to take it 's place as my new mp3 player / harddrive . 
+##for an early christmas gift , i got a zen xtra 40 gb player . 
+##i refused to go for an ipod , i am not going to spend all that money just for the apple name and because it is " trendy " to have that player . 
+##this was the closest alternative and best buy for this type . 
+##after receiving my zen xtra 40gb mp3 player .. . 
+##i will just say this : 
+##i will never go back to my archos again ! ! 
+set up[+3]##so easy to set up , had some problems with my archos . 
+##stayed up all night trying to figure out that thing . 
+nomad explorer[+2]##just easily drag and drop files into the nomad explorer and from there you easily alter id tags and sort your music according to your liking , by artist , song title , genre , etc. 
+player[+3][p],look[+2][u]##not only is it functional and runs super smooth & fast , but it is also eye candy . 
+design[+3][u]##very sleek & stylish as well as the screen options and visuals it has . 
+leather case[+2]##the leather case it comes with is pretty nice , similar to a pda style case and does hold and protect it perfectly . 
+button[+2]##all the buttons & neccessary lil ' gadgets are on the sides of the player which is nice for when you are holding it in the palm of your hand . 
+sound quality[+2]##the sound quality is also nice ... after i hooked up my sony headphones instead of those factory earbuds it comes with . 
+sound option[+1]##lots of sound options , has an equalizer almost like winamp with the options . 
+navigation[+3]##navigation is so smooth and finding files is a cinch . 
+navigation[+2]##also navigating while playing music is a plus unlike my previous player . 
+##it was impossible to do so before . 
+screen saver[+2]##oh , and the screen saver feature is pretty sweet ^ _ ^ 
+file limit[+2]##another plus in my book , no file limits ! 
+##i was limited to 999 files in a playlist with archos ' os , now i can have as many as i want . 
+playlist[+2]##i have over 2000 files in my playlist at the moment and the random does a nice job mixing it up . 
+storage[+2][u]##i am quite happy having over 10 gigs of music stored on this baby as well as a few gigs of media files in the data folder . 
+##now i can transport files to friends house with ease . 
+##when plugged in , it does n't lag the computer like the archos did ... unless you are doing a massive transfer of data in one load . 
+##after playing with this little device , i do n't know why i would look at an ipod with the same space when it costs $ 500 and i got mine for a little more than half that price ! 
+player[+2][u]##i really have no complaints over this unit . 
+player[+3]##i really do recommend this to anyone in need of a new player . 
+##in fact , my boyfriend is now going to invest into one of these suckers as well ... now he realizes that this is the best choice over his current archos and the ipod he was eyeing . 
+[t] not able to install . 
+installation[-3]##getting the program to install properly has been a living hell experience . 
+##the cd just has too many problems with win xp . 
+##i am going to have to try an online download and see if that works . 
+manual[-3]##also , the instruction manual is very bad . 
+[t] fantastic piece of machinery . 
+player[+2]##i have no complaints with this mp3 player . 
+file transfer[+2][u]##getting files onto it is quick and painless . 
+sorting[+2]##then sorting the files is easy as pie . 
+storage[+3][u]##and it holds sooooo much music and audio files . 
+player[+2][p]##my music demands are pretty intense and this handles those demands without problems . 
+sound[+3],earphone[-3]##also , the sound is wonderful ... my only gripe were those aweful earphones that this came with . 
+##come on, at $ 300 they could at least put in a good pair of earphones . 
+##sheesh ! ! 
+battery[+2]##the battery is nice . 
+##i listened to it for several days before needing to recharge them . 
+screen[+3]##the lcd screen was very large and readable . 
+##thank you ! 
+##my last mp3 player 's screen drove me nuts . 
+##a great buy . 
+player[+3]##compared to everything else in this category , this is most definately the best bang for the buck . 
+[t] not ipod competition . 
+##i think the whole zen line has been fairly innovative and reasonably priced , but it 's not really appropriate to compare the pricing of the zen line to the ipods ( although , the ipod is still way over priced ) . 
+##you 're talking totally different hardware . 
+##all of the zens use a standard notebook drive . 
+##this puts the zen in line with players like the rca jukebox and the whole line of archos players ( the newer ones are a bit better than the original archos jukeboxes ... but i popped out the drive in my 20 gig jukebox recorder and put in a 60 gig drive and use it exclusively as a powered portable usb 2.0 drive ). 
+##the ipod uses a smaller ( and more expensive ) drive ( 1.8 " ) . 
+##the devices competing with the ipod are the iriver ihp 120 , the rio karma , and the philips hdd100 . 
+##i should point out that the new rio karma is now down to about $ 280 and is reviewed readily as being as good as ( and better in some areas ) the ipod . 
+##the 20 gig ipod still goes for just under $ 400 . 
+##that 's a huge difference ... especially in this price range . 
+##i can 't believe people continue to pay those prices . 
+##advertising pays off i guess .. . 
+##i doubt anyone has ever seen an add or commercial for any other mp3 player . 
+zen[+3]##i gave the zen 5 stars because it 's excellent for the class that it is in and it 's not really appropriate to rate it based on players in a different class . 
+##my personal favorite is the karma ( i currently own a karma , a zen usb 2.0 , a philips hdd100 , and an upgraded 60 gig archos jukebox recorder ). 
+##i guess that 's why you so often see " ipodders " bashing every other player out there ( very often not knowing anything about them the whole " i spent $ 120 more for something not any better and so should you ... so i can feel better " thing . 
+[t] ipod vs nomad zen xtra 
+##i originally purchase a 30 gb nomad zen xtra as a portable mp3 player . 
+##after fiddling around with it for a while , i notice a few dissapointments : 
+transfer[-2]##transfering - i could not get my songs to completely transfer via usb 1.1 or 2.0 . 
+transfer[-2]##it would only transfer 30 or so songs , and then come up with an error . 
+##having 4000 or so mp3s , i never got more than 500 transfered . 
+scroll wheel[-2]##scroll button - the scroll wheel was a nice idea to keep less clutter , but the button would sometimes get stuck or keep scrolling . 
+size[-1]##size - bigger than the ipod 
+software[-1]##software - music match jukebox is n't the greatest , the search funtion is n't fast even when accessing it with the hotkey shortcut . 
+##after i went through the transer issue , i returned the zen xtra and purchased the 40 gig ipod . 
+##song transfers were not an issue . 
+##i transfered all 16 gigs in 15 minutes without any errors via firewire . 
+##the navigion on it can be a little quirky , but still operates better than the zen 's did . 
+##the ipod is also an attractable piece , being lightweight and small . 
+##the casing scratches a little easy , but the glove cases work great to protect against this . 
+sound quality[+1]##sound quality was the same between the two , but the zen did have more sound adjustments with the normal eax features . 
+##i chose to keep the ipod and am very happy with the purchase . 
+##granted it is a little more than the zen , it is well worth it . 
+##itunes is a versatile program and i have n't had any issues with the ipod itself . 
+[t] wonderful . 
+player[+3]##i love this player . 
+##its great . 
+player[-1][p]##all i have to say is that i did freeze on me once , but it has n't done it since . 
+player[+3]##i love this player and would probably go with creative labs again . 
+software[+2]##the software was great , as long as you have an adminstrative user account ( windows xp ) . 
+##i got every song i had downloaded to the player within a day or so . 
+##it only took about 30 minutes to download everything , and that was about 950 songs . 
+player[+3]##anyway , this player is a great deal and i really love it . 
+[t] a good product . 
+size[-2][u],weight[-2][u],look[-1],folder structure[-1]##first , the cons ... a tad bulky ... not the most asthetic looking player ... and does n't support a folder structure .
+##the pro ... 
+price[+2][u]##way less expensive than the ipod . 
+##my opinions : 
+##personally , i do n't understand all the complaints about the interface .. . 
+interface[+2]##i find it pretty easy to use ... and unlike the remote interface for the audigy 2 nx ( on the pc ) .. . 
+##it actually gives the option to clear the previous playlist when i want to play another list . 
+##meaning i do n't have to manually clear the list , and then load the new list . 
+folder structure[-2]##the cons are n't really a big deal to me ... except one con that does annoy me is the way it stores files ... no folder structure ... and it 's based on the title of the songs ... many of my songs where seperated into folders ( on the pc ) ... and a few had same titles ... so i had to change the titles to make sure that i did n't have any that might be the same as another . 
+chinese name[-2]##and man ... i had to work to put my chinese songs on the player ... because i had the actual chinese names of the songs as the title .. 
+##and since the current language selection was english ( even though i think only the menu supports chinese , and not the track info ) ... all it saw were " ? " s and even though the songs had different names in chinese .. 
+##if it had the same number of " ? " s then it would ask if you want to overwrite another song that just had the same number of " ? " s. . . 
+##buyer beware ! sort your songs and adjust the titles accordingly ( maybe this applies to other players too , and not just the nomad , i do n't know ) . 
+##i would 've still bought this drive even if i knew about this issue beforehand . 
+transfer[+2]##not counting the time i spent editing the songs ( i suppose i should 've done it anyway on my pc ) the transfer was pretty painless . 
+##once you start sending files , it 'll continue until it 's done or it hits a song that has the same title as another song ... at which point you can skip , skip all , replace , replace all , or cancel . 
+##and go from there ... if you chose one of the " all " options , then you do n't need to do anything until it 's done . 
+##in two transfer batches ( first was english songs , then foreign languages ) , it did n't come up with any errors ( aside the duplicate name i mentioned ). 
+##so i do n't know what the previous review that could n't do more than 30 songs is talking about . 
+##of course , unlike that person i will mention that i upgraded the firmware to 1.23 . 00. but i did transfer files before the upgrade without problem too . 
+##you should update the firmware before upgrading the drivers if you decide you need the newer drivers for the pc. 
+##the mediasource itself was flaky ... crashing my explorer twice within the first hour ( the crash did n't require a reboot ) ... but after another reboot , it has n't crashed since . 
+##did i mention i 've already dropped it once ? 
+##that was n't pretty . 
+##there 's a dent on the upper-back-right and lower-back-right corners ... not too obvious unless you 're up close . 
+##hehe , my bad . 
+##that 's all for now . 
+[t] so far , it 's sweet . 
+xtra[+3][u]##bought the 30gb xtra a couple of weeks ago , and so far it has been excellent . 
+storage[+2][u]##i still have over 19gb left , and already have over 200 cd 's on it . 
+##i 'll have to borrow cd 's to rip from friends to even come close to filling the thing . 
+##i 'm not sure why people have problems with either the interface of the nomad , or the software that comes with the unit . 
+interface[+3][p],software[+3][p]##both are very easy to learn & use , and intuitive enough for even a novice . 
+##besides user error ( surprise , surprise ) , it 's hard to imagine people having trouble with either . 
+transfer[+2]##ripping & transferring tunes is basic , and pretty fast ( even on a 1.1 usb ) . 
+case[+2]##people also have complained about the case not having a window , but that 's not really a big deal to me either -- the case is sturdy and offers very good protection . 
+case[+2][p]##it 's easy enough to pop it open to see what song you 're listening to . 
+sound quality[+2],look[+3],screen[+2], battery[+3]##the sound quality is excellent ( and i 'm fussy with that stuff ) , the unit looks cool , screen is bright and easy to read , and the replaceable battery means a major advantage over the ipod ( besides the price , but everyone knows that ) . 
+option[+2]##you of course have some good customization options with the unit as well ( sound presets , navigating options , playlists , etc ) . 
+##i just put it on " shuffle " , sit back , and enjoy the eclectic mix that almost 3,000 tunes offer ! 
+button[-1]##the only thing i 'm concerned about is the quality / longevity of the buttons on the thing . 
+button[-1]##my " fast forward " button works , but it takes a little extra pressure on it to make it go . 
+##not an urgent issue , as it still works .. . 
+button[+1]##all other buttons are pretty sensitive to touch and work well . 
+##i 'll have to see if this becomes a problem down the road . 
+support[+2]##but i 've already emailed creative tech support about it , and gotten timely responses - they will fix it for me if necessary .. . 
+##we 'll see if i need them to . 
+size[-1]##sure , it 's a little bigger than the ipod , but not by much . 
+##this is not the unit you should use if you go jogging anyway . 
+size[+1][u],weight[+1]##it still fits in the palm of your hand , and it 's not heavy . 
+##i use mine at the office , in the car ( with a cassette adapter ) , and will be taking it on a flight back east for the holiday . 
+##yes . 
+##get better headphones . 
+##rip your tunes at 192kb if you like , alhthough 128kb sounds just dandy , and you 'll get more tunes stored on it . 
+product[+2][u],price[+3]##bottom line ... great product , unbeatable price . 
+##i got mine for $ 160 less than the ipod 30gb ( got an extra $ 30 off for applying for an amazon visa ... thanks amazon ! ) 
+##basic shipping was a bit slow , but that 's okay . 
+##i got it now , and i 'm diggin ' it . 
+[t] nightmare . 
+##awful , awful , awful . 
+id3 tag[-3]##unlike my 3 other mp3 players , this thing will only work properly if you have id3 tags on all of your tracks . 
+id3 tag[-3]##if you do n't have tags , it 'll lump all of your tracks into the same directory and they cannot be searched via artist or album as the zen does not recognize folders . 
+##it 's a shame , but mine is going back . 
+##bummer as it has great sound quality . 
+[t] excellent product . 
+player[+3][u]##i just received my 40gb zen xtra yesterday and i 'm extremely pleased with it . 
+##my brother bought an ipod this past summer and my dad bought the original zen around the same time .. 
+##just before we all spent a couple weeks in an rv together . 
+##the ipod is a neat piece of machinery but after screwing around with both of them i think the zen products are the way to go . 
+##so i requested and received a zen xtra as a christmas gift . 
+setup[2], transfer[+2]##the setup and transfer process was cake for me . 
+##i just used the explorer program to move my songs to my player . 
+transfer[-1][u]##i did have to put a little work into renaming some duplicate file names to get all my music on my zen xtra but it was n't a big problem . 
+explorer[-1]##the explorer program did shut down a couple times while i was renaming titles and changing genres but i did n't have to reboot the computer or anything , just open up explorer again . 
+##it 's been so long since i 've had a program not shut down on me in windows that i hardly even noticed that it happened . 
+##that 's probably a bad thing . 
+player[-1]##the unit itself did lock up a few times and i had to hit the reset button but that was a fairly painless process as well . 
+##it was always after it finished a process or something , so it did n't cause any file errors . 
+player[+1]##now that i have all my music on it there has n't been any more problems . 
+screen[+2]##the screen is large and bright and has all the info i need where i need it . 
+##i have n't tried setting up any playlists yet so i can 't comment on any problems there . 
+eax mode[+2]##the eax mode that keeps the volume at the same level for any song will come in handy when i take my holiday plane rides . 
+jog dial[-2]##the little jog dial seems weak and quirky and i hope i do n't figure out a way to break it . 
+##the dial on the original zen was perfect and i wish it was on this model . 
+mp3 player[+3]##all in all though i 'm very happy with my new mp3 player . 
+##i 'll admit that i 'd own an ipod if i had money to burn , but for the money this is a much better buy . 
+##highly recommended ! 
+[t] fantasic product . 
+nomad[+3]##i purchased the nomad jukebox zen xtra 40gb and it is fantastic ! 
+installation[-1]##i have windows xp pro and when installing the enclosed software i did receive a message that there was a problem installing the driver . 
+##this was quickly and easily fixed by going to the creative web site and downloaded then installed the updated driver . 
+software[+3]##i found using the supplied mediasource software very easy . 
+##if you have always on internet or are logged into the internet you can use the feature that will download the album & song id information ( this is a free service ) with the click of a button . 
+playlist[+2]##ripping your songs and creating playlists could n't be any easier . 
+mediasource[+2]##i found using mediasource to load your songs to the nomad jukebox to be much easier and faster than using windows explorer . 
+##just highlight the songs you want to transfer from your playlist or music library then click one button and it 's done ! 
+playback quality[+3]##being a creative product the playback quality is unbeatable . 
+##i use my own mid-priced headphones rather than the enclosed earbuds . 
+sound[+3][u]##when i played back a symphony orchestra you would swear that you were seated dead center in front of the orchestra - it 's that good ! 
+sound quality[+3]##the sound quality with jazz and pop music is equally superior . 
+nomad[+2]##actually using the nomad jukebox is easy and uncomplicated . 
+finding[+2]##finding a particular song ( s ) or album on the nomad jukebox is fast and easy . 
+##i like to play my music by album and the nomad jukebox plays the songs in the same order as the actual cd . 
+screen[+2]##the high resolution screen is easy to read and has a backlight . 
+use[+3], playback quality[+3],price[+2]##i can highly recommend this product because of its ease of use ( hardware and software ) , playback quality and value for the price . 
+[t] good value . 
+player[+2][p]##just bought one & i 've enjoyed it to date . 
+size[+1]##nice palm sized unit , somewhat bigger then the ipod but not an issue if you 're not going to try & jog with it or something . 
+sound quality[+2]##all reviews i 've seen seem to indicate that the creative mp3 jukeboxes have the best sound quality of these 2nd generation jukeboxed ( ipod , archos , dell , samsung ) . 
+eax[+1]##the eax settings are somewhat superfluous but not really a negative . 
+player[-1]##i 've tried the belkin fm transmitter unit with it & it worked well when i set it on top of a portable radio , but was awful trying to use in the car which is somewhat of a disappointment . 
+##dislikes 
+control[-2]##- the controls are much inferior to the simple ipod ones . 
+fly wheel[-3]##the black fly wheel feels pretty cheap & is uncomfortable to use . 
+button[-2]##the locations of various buttons on one side or the other is somewhat illogical 
+software[-2]##- included creative software is pretty poor . 
+##red chair 's notmad explorer is great & recommended by about every reviewer to repleace the creative jukebox software . 
+##note : this will add about $ 30 to the price to purchase , but worth it 
+##likes 
+price[+2]##- great value 40gb vs 10 gb ipod for the price 
+sound[+3]##- best in class sound 
+screen[+2]##- large easy readable screen 
+[t] depressingly poor quality . 
+##after receiving the box from amazon , i proceeded with charging the unit for the specified 4 hours , after which i installed the software and connected the unit to my pc via usb 2.0 . 
+##the pc quickly picked up on it and attempted to install the software , which failed , as creative chose not to follow microsoft standards , whatever . 
+##i then installed the software manually instead , after having to click past about 5 windows of " please register with us so we can spam your inbox " . 
+##at this time , i decided to turn the player on , and much to my surprise it comes with quite the little library of classical music , one of which is a childhood favorite , bach 's air . 
+play[-3]##i tried to play the song three times , with no success . 
+play[-3]##it would either not play the song at all , or skip wildly , no matter that the unit was resting on my desk . 
+##well , maybe that particular song was just corrupt , so i tried to upload some of my own , after four attempts , at each one the unit locked up and required a reboot , i managed to upload an album , which albeit was surprisingly fast , however when attempting to create a playlist out of my newly uploaded songs , the nomad again froze up and refused to work . 
+##i made an additional five attempts at creating a playlist , before packing the unit up and heading over to amazon 's product return page . 
+##needless to say , i would n't recommend anyone purchasing this product . 
+software[-3]##had there been strange noises , or obvious defects , i would have accepted a replacement , but this is clearly from a defective and inferior operating system and i for one do not intend on waiting for patches . 
+[t] wonderful . 
+##charged my battery . 
+##plugged it in . 
+##installed software . 
+##started ripping and transferring . 
+##if you arent hooked up to cddb to get the album info i guess you have to manually input the stuff , but that little work will save you looking for songs . 
+##i 've got 1200 songs on it now and about 4000 more to go . 
+player[+2][p]##working for 10 hours with it on " shuffle " totally rocks ! ! 
+player[+3][p]##i love it ! ! 
+[t] poor reliability . 
+##i bought this only to have it break within a month . 
+player[-2][p]##this product is too fragile for normal use . 
+[t] good player , but this technology is not yet great . 
+##i received this as a gift . 
+software[+1]##i had no problems setting up the software and getting my favorite cd 's transferred . 
+software[-1]##however , the creative software is not real intuitive . 
+software[-2]##the software is somewhat nice to look at , using it is not the easiest . 
+rename[-2]##if you want to rename a cd title that you have already transferred , you will become frustrated quite quickly . 
+##you are better off deleting it , re-ripping it with the new title and then transferring it to the player . 
+transfer[+3]##transfers are surprisingly quick through usb 2.0 . 
+sound[+2]##it is great sounding , even with the supplied earbuds . 
+earbud[+2]##i must have differing preferences than others here , as i prefer the supplied earbuds to the sony 's that i thought sounded good on other players . 
+storage[+3]##i love the storage in this thing . 
+##i have 100 of my cd 's transferred and have n't made a dent in the 30 gb drive . 
+##i doubt i will use half of the storage capacity , but you never know . 
+##this is definitely opening up possibilities to obtaining mp3 's in which i would have never purchased the cd . 
+##now my dissapointments . 
+##the description of the warranty is buried on the supplied set up cd . 
+##the warranty is 90 days . 
+warranty[-3][p]##this is ridiculous . 
+##to me this alludes to the manufacturer 's confidence that the product will last for a year . 
+##buy the re-seller 's extended warranty and save yourself a headache for the problems you will have later , after all it is a hard drive and it will die or have issues over time ( probably sooner than later ) . 
+scroll wheel[-3]##the scroll wheel , to be blunt , sucks . 
+scroll wheel[-3][p]##seems it is always difficult to press to make a selection . 
+interface[-2]##the interface used could be better designed . 
+interface[-2][p]##it is a little cumbersome to scroll through so many levels to get to the selection you want . 
+##i am a software engineer and if i wrote an interface to my software that worked like this , there would be hell to pay , not to mention the ridicule from my peers . 
+case[-3]##and the case , how did this ever make it out of quality control . 
+case[-3][p]##it is some protection for the unit , but for useability , forget it . 
+##the screen is covered , so to make any new selections you have to open it . 
+control[-2]##the cut-outs for the controls is not thought out as there is too much material in the way to adequately access the controls , especially the scroll wheel . 
+##there are no other aftermarket cases available for this model yet , so you have to live with it . 
+player[+2][p]##despite the things that i have listed so far , i could live with this item since it saves me from lugging a cd case to work , to the gym , in the car , etc. . 
+lock up[-2]##however the main reason i am not satisfied with this product is the fact that it will lock up at odd times . 
+##i have had it lock up after a transfer of music . 
+##the files are there , but i could not access the player without removing the battery , waiting a short period and re-inserting the battery . 
+##also have had it lock up when i shut it down to attend to a phone call . 
+##left it set on my desk came back five minutes later and it just wanted to keep playing the same song over and over . 
+##could not stop it , could not get out of the " now playing " screen . 
+##again had to remove the battery . 
+##there have been other occurrences of locking , but i will not bore you with the details . 
+firmware[-2]##quite simply , the firmware and / or the os that control this thing is not ready for prime time . 
+##there have also been times that the unit has been turned off for some period of time , upon powering it up it starts on the " now playing " screen with a song or cd that i had been playing days before . 
+##i have n't quite figured this one out yet , but it is probably operator error . 
+##now i have not owned other mp3 players as i was waiting until they matured , but since i received it as a gift i now have this one . 
+##i would suspect that there are similar problems with all of the other brands as this is somewhat new technology . 
+##and we all know about the rush to market on new products . 
+##i have had this player for 2 weeks , i will be returning it for an exchange in the hopes that the locking problem and scroll wheel are problems with this particular unit . 
+##while i am at the store i will definitely get the extended warranty as i have another day or so ( from the purchase date ) to obtain one . 
+warranty[-3]##i know this unit will have problems in the future and the $ 40 for the 2 year " no questions asked " replacement warranty will be worth it , since creative will only warrant it for 90 days - which in itself is totally ridiculous ! 
+[t] excellent product . 
+player[+3]##this is my second creative labs mp3 player , and it is definitely a fine product . 
+##first let me give you the bad things : 
+size[-1],weight[-1]##1 . the size is a little bit bigger than the ipod , and it weighs a little bit more . 
+scroll[-2]##2 . the scroll button is n't the best , as it sometimes can be hard to select . 
+##3 . that 's pretty much all the negatives the positive things truly outnumber the negatives , and the negatives are n't that bad . 
+sound quality[+3]##first of all the player 's sound quality is superior to the ipod . 
+software[+3]##the player 's software is very easy to use and very good . 
+software[+2]##compared to musicmatch , the software has a better filing system and easier to use . 
+player[+2][p]##to keep it short , this is cheaper , and in my opinion a better choice than an ipod . 
+[t] difficulties with tags . 
+##if you purchase this product , definitely rip your songs through windows media player . 
+##otherwise , you 'll have to mess around a lot with filenames inside the ( decent ) nomad explorer , which is not fun at all . 
+player[+3]##this thing seriously is a good player though . 
+[t] another electronics fan . 
+##summary 
+unit[+2]##overall i like the unit . 
+player[-2][p]##i gave it only 3 stars due to the fact that the 1st one broke when i dropped it from a fairly short distance ( less than 2 ft ) . 
+##if it were not for that i would have given it 4 . 
+##pros : 
+price[+2]##1 ) price / gb of storage 
+storage[+2]##2 ) storage capacity 
+battery[+2]##3 ) user replaceable battery 
+##cons : 
+construction[-2][u]##1 ) fragile ( i broke the 1st one within 10 days ) 
+scroll[-2]##2 ) scroll button / switch 
+case[-2]##3 ) the case hides the display - you have to open it to see what you are doing . 
+##features that would have been nice : 
+##1 ) fm receiver - some models out there have this . 
+##2 ) fm transmitter - so you can place the unit in your car and listen to the unit through your car stereo . 
+##they sell an adapter unit to use with your car 's cassette deck . 
+##but who wants the wires involved . 
+##a short range fm transmitter would be much nicer . 
+##i believe the napster mp3 player has this feature . 
+##details : 
+##do n't drop this unit : 
+##i 've had the player for about a month now . 
+player[+2][p]##overall i like it . 
+##as mentioned above i broke the player within the 1st 10 days . 
+##i was sitting on a train and it fell off my lap and broke . 
+##i think it fell right on the earphone plug when it fell ( murphy strikes again ) . 
+##i was able to return it to the retailer where i bought it and got a replacement . 
+##if you are going to need a player that is rugged this may not be the one for you . 
+##i purchased the extended warranty ( something i almost never do ) when i returned the unit to get the replacement . 
+##updating the unit 's firmware : 
+##when i first purchased the unit i downloaded the firmware update that was available on their website . 
+##the upgrade went smoothly and was easy to do if you can follow directions . 
+##i would recommend doing the upgrade to be sure you have the best chance at trouble free operation . 
+##storage : 
+storage[+2]##the storage capacity is great . 
+##i do n't think i will ever use the full 30gb . 
+##i currently have ~ 1100 songs encoded mostly at 196 kpbs and i have n't even used 10gb of storage yet . 
+##i 'm starting to listen to cd 's that i have n't listened to in years now that i have them all handy in one place . 
+##for those out there that are not familiar with mp3 encoding , you can encode your cd 's at varying quality levels . 
+##typically people use 96kbs to 320 kps. 
+##the higher the number the better the quality ( less data compression is used ) and the larger the file size . 
+##if you decide to encode at 320 you will fit less on this device than someone who encodes at 128kps . 
+##you should consider this when deciding what bit rate you want to use and how much you want to put on the player . 
+##if you 're someone who wants to put 10,000 songs on this thing you may want to encode at the lower end ( typically 128 is considered close to cd quality ). 
+##price : 
+price[+2]##the price compared to the ipod is great . 
+price[+2],battery[+2]##price , along with the replaceable battery ( which i understand apple charges a small fortune to replace - as well as the hassle of returning it ) were the two main factors on why i picked the nomad . 
+##one word of caution with regards to using the nomad with itunes . 
+##i discovered this weekend that itunes does not sell mp3 's in the mp3 format . 
+##it using something called ac3 ( at least the trial song i purchased was in this format ) which is not a compatible format for the nomad . 
+##i have n't figured out if this is the case for all the songs on itunes . 
+itunes[-2]##but for now it appears that this player does n't play well with itunes . 
+##scroll bar : 
+scroll[-2]##the scroll bar is a bit of a pain . 
+##sometimes you skip past things or have to press it twice to select items . 
+##it 's not the end of the world , but a better design sure would be nice . 
+##software : 
+software[+2]##i 've had no problems with the software . 
+software[+2][p]##i found it intuitive to use ( i did n't read any documentation for it and was using it successfully within a few minutes ) . 
+##the software will convert your cd 's to mp3 and put them on the player as well as your hard disk if you want it to . 
+##my 2.6 mhz pentium 4 with usb 2.0 was able to perform the task pretty quickly ( i would estimate ~ 5 - 8 minutes per cd ). 
+##through the software you can classify songs in genres . 
+software[+2][p]##this is a nice feature ( i.e. it 's early in the morning and you rather listen to " easy listening " rather than " heavy metal " - no problem . 
+software[+2]##the software comes with plenty of defaults genres . 
+##you can also create your own if you do n't like their classifications . 
+##you can edit the genres once the songs are on the play if you decide to re-classify things later . 
+##this can be done on a song by song basis or in mass . 
+##in addition , you can create play lists where you can create the equivalent to a compilation cd right on your player . 
+##this is pretty cool . 
+##sound : 
+sound[+1]##the sound from the player is ok . 
+sound[-1]##i was a little disappointed in the low end . 
+##i did buy separate headphones as other have recommended . 
+##i was able to improve things a bit by using the units equalizer and boosting the base . 
+sound[-2]##the sound level is also not as high as i would have expected . 
+##it 's probably good for the health of your ears , however i consistently play it near the high end of the volume range ( and my hearing is fine ). 
+[t] searching for dennis ! 
+##wow , dennis sure is great ! 
+##slowly yet surely my unit engorged as i read my own review , similar to when i look in the mirror . 
+this thing[+3]##this thing is great , i like to use it to pick up tough stains on my countertop and also to listen to my old 8-track records . 
+##sometimes when i get really lonely , i like to put on some kenny g and light some candles , and while this does n't help , i am a capitalist pig and like buying things too , nah mean ! ? 
+##i did have some problems figuring out how to turn the unit on , but creative did a good job with this , as they had a clearly labled " on " button that i found when i left my cellar for the first time in years . 
+##there was very little light in there . 
+##anyway , im gon na go find dennis now , have a nice day ! ! ! 
+[t] it is ok , but .. . 
+##i got my zen xtra a little bit more then a week ago . 
+##it was not my first choice . 
+##i have done a lot of research before i decided to buy the nomad zen xtra . 
+storage[+2]##one good thing , it is 40 gb of disk space ( well , it is 38 gb in reality ) . 
+price[+3],feature[+3]##for the price and features it is really good . 
+##one thing , before buying this player i have called the creative tech. support and asked them if i can navigate by folders beside artist / album and answer was yes . 
+##sure enough there is no such ability . 
+##not sure , if customer rep. did not know the product exactly , it is still new or they just give an anser which users would like to hear . 
+navigation[-2]##in any case , navigation by artist / album is ok however i miss an ability to navigate by folders . 
+navigation[-2]##you even can not navigate by genre / artist / album since under genre you get just all tracks in that genre , no other division . 
+##creative is talking about updating it via firmware , however after following some while the descussion groups for nomad players , looks like creative represents mostly bug fixes in their firmware updates , not too much of new features . 
+software[-2]##the software , which comes with player is not good at all . 
+nomad explorer[-2]##i did not managed to make creative nomad explorer to work . 
+##after installing it and trying to make it working for 30 minutes i went and bought notmad . 
+##notmad worked right away after install and it is what i would like to see from the product . 
+##transfer files is easy using notmad , however again , would be great if nomad supported folders like iriver , rca lyra and some other . 
+##often i fill i need to have better organization for the library and there is not enought of variables . 
+##artist , album and genre are only mp3 tags which are supported buy this player , and if you have 100 artists would be good to have another subcategory . 
+##after all those players have 40-60 gb of hard drive , so better organization is required . 
+##the bottom line , i 'll still watch the progress of iriver hdd players and if they produce 40 gb player i 'll will sell my nomad and buy iriver . 
+[t] the bundled software blows , yes ... ... but i heard of notmad explorer ( http://redchairsoftware.com) from the creative tech support people . 
+##i downloaded the trial version , and after less than 10 minutes of using it , decided it was well worth the price . 
+software[-3]##so yes , as with all software bundled with creative products , it was useless and ugly . 
+##for once , though , this 3rd party software is excellent . 
+##dont let the bad reviews of the software change your mind . 
+##zens rule . 
+[t] unmatched quality and beyond cool . 
+##originally i wanted the ipod . 
+##most people probably wanted the ipod before realizing that a vast array of full-featured viable alternatives exist . 
+##i like the way apple is innovative , but let 's face it - they can 't be the only one with an idea to enclose a 2.5 " hd within an aluminum case in a stylish package for long , especially after the buzz is out of their little techie pod . 
+zen[+3]##the 30gb zen xtra rocks my socks , spills my beer , but does n't wash my car . 
+##so what ? 
+##i can do that myself . 
+battery life[+2],online music service[+2],pc compatibility[+2]##longer battery life , greater accessibility to online music services , and pc compatibility are the sensibilities . 
+##the visceral teases include the case , the sound quality , and the capacity . 
+##i have n't checked the resilience of my xtra yet , and do n't plan to . 
+##however , if anyone has participated in violent or extreme sports while using their zen , please share your experiences . 
+##i 'm considering using mine as a distraction to winter boredom in the paintball fields . 
+##it can get pretty lonely out there . 
+[t] creative thinking . 
+player[+3]##i just purchased this player and i have to say that i love it . 
+sound[+2],battery life[+2],price[+2][u]##the sound is excellent , the battery life is excellent , the fact that the battery is replacable is excellent , and finally the price , $ 200 cheaper than the 40gb ipod , is excellent . 
+##the only thing the ipod has over the nomad is the style , size , and ease of use . 
+style[+1],size[+1][u],control[+1]##the nomad is not ugly , it is not that big , it comfortably fits in my pocket , or heavy , and the controls are not hard to get used to . 
+player[+2][p]##so far i have no complaints and i recommend this to anyone who wants quality over appearance , also anyone who wants a harddrive based mp3 player and wants to pay next to nothing . 
+##i only have one question , when i add tracks to my nomad , via nomad explorer , they are automatically put in alphebetical order , rather than album order . 
+##is this possible to fix , if so how , if not does notmad explorer from red chair software do this ? 
+##i would like album order for my live albums and was just wondering . 
+##thank you very much , and go out and get yourself a nomad ! 
+[t] got to get an ipod ! 
+##wow .. . 
+player[-3][p]##this thing is trash . 
+##want the laundry list of reasons why ? 
+##of course you do ! 
+construction[-3][u]##a ) feel cheap -- the plastic is feels like it would break very easily , and it definately wouldnt survive a drop 
+screen[-3]##b ) the screen is hard to read -- the cover hides it an already annoying poorly lit display 
+scroll[-2]##c ) the scroll bar is a travesty -- enough said 
+software[-3]##d ) software is another great misfortune -- hard to operate , crashes frequently , screwed my music library up , doesnt work with mp4s , the list goes on and on 
+case[-2]##e ) the case is too small -- it took me like a half hour just to get this monstrosity to fit in its cage 
+look[-2]##f ) it doesnt look pretty -- spending this kind of cash , you want something that has the asthetics bit down , of course 
+##so .. . 
+##im taking mine back tomorrow morning , and getting a nice shiny new ipod instead . 
+##do n't waste your time , engery , resources on this thing , just spend a little more for a far more functional ipod . 
+[t] do n't buy it . 
+##i bought the zen xtra 30g as a gift . 
+##what a disappointment . 
+software[-3]##the software failed repeatedly . 
+##i could n't load more than one song before the software crashed . 
+customer support website[-3]##creative labs customer support website is useless . 
+software[-2]##software downloads on the site crashed my pc . 
+##creative tech support operators work 9-6 p.m. weekdays - as if i had time during work hours to spend time on this . 
+##do n't buy this thing . 
+[t] great mp3 player . 
+player[+3]##i just bought this player today and i already love it . 
+play[-1]##it has a few inconveniences : one is that the songs do not automatically play one after another like on a cd . 
+scroll[-2]##another irriation is that if you hold the scroll button down for too long , it keeps going past the song you may have wanted to stop on . 
+player[+3]##otherwise , this player is awesome ! 
+screen[+2]##it has a clear blue light that allows you to see everything on the screen easily . 
+volume range[+2]##the volume range is great , so you can blast it if you want . 
+player[+3]##overall , this player is awesome and i definately recommend it . 
+[t] perfect purchase . 
+this item[+3][p]##i received this item for christmas and it has met and exceeded all my standards . 
+price[+2]##naturally i did quite a bit of review before purchasing ( i recomend www.nomadness.net ) , and price-wise zens are unbeatable . 
+value[+3]##compared to other leading hdd mp3 players , the value per gb is the tops . 
+##- price : see above . 
+sound quality[+2]##- sound quality : excellent , everything you would expect from this company . 
+use[+1][u]##- the unit is easy to use and intuitive . 
+##it took me about 5 minutes before i had mastered the controls . 
+uploading[+2]##- uploading music is quick and easy . 
+software[+2]##although the supplied software can be annoying at times , on whole it is excellent . 
+##i have uploaded about 3,000 songs now with very minimal difficulty . ( it 's fast too ! ) 
+##btw , be sure to have your mp3 tags labled correctly , as this will ensure a great organization . 
+player[+2][p],button[+2]##- the unit itself its well structured , with just the buttons you need and none you do n't . 
+scroll[+1]##as often mentioned , the scroll tab is average , however , not difficult to use or horrible . 
+##structurally , everything is secure and it wo n't fall apart on you . 
+screen[+2]##the screen is large , defined , and easy to read , and the silver unit is naturally cool . 
+feature[+1]##there are lots of interesting features included such as eax , and customization . 
+battery[+2]##- the replacable battery is great since once it eventually wears out ( as all lithium batteries do ) , you will be able to buy another easily . 
+##ipod users have to send theirs back and pay $ 100 for a replacement . 
+battery life[+2]##also , the nomad 's 14 hours of battery life versus 8 is handy . 
+equipment[+1]##- equipment included is average , but that is n't a big deal since thats not what you are buying it for . 
+case[-1]##the case is strong and stylish , but unfortunately lacks a window ( now a big deal ) . 
+headphone[+1]##the headphone earbuds are average , so just use your regular pair instead . 
+##conclusion : 
+player[+3]##this player is an ideal purchase . 
+##there is n't need to get in details again , but just remember it rocks because : price , sound , ease of use , and features . 
+##i would recogmend this player to anyone i know , and you will not be dissapointed . 
+[t] impressive with few flaws . 
+player[+3],software[-2]##the nomad jukebox zen xtra is a very good mp3 player but the software is it gets hurt . 
+player[+3]##i have no problem using the player itself and i feel it is a very good player . 
+software[-2]##on my main computer the software did not work right . 
+customer support[-2]##i had to sit on the phone with customer support for 2 hours and they did not help at all . 
+##i eventually gave up with customer support and worked on fixing the problem myself . 
+player[+3]##i have the software working fine now and the mp3 player is fantastic . 
+##it seems that depending on the system the software might not work or might work , because it works on all the other computers i have . 
+player[+2]##so once i worked out the problem with the software this mp3 player is worth the money it cost . 
+[t] awesome . 
+zx[+3][p]##i 'm very pleased with my zx so here 's a quick review . 
+##first there 's the unit itself . 
+size[+1][u]##it is small overall , bigger than the ipod , but keep in mind that this is because different , less expensive but not necessarily inferior technology is used in the zx . 
+sound quality[+3]##the zx boasts superior sound quality than the ipod , however it compromises a bit of the unit 's size in doing so . 
+lcd[+2]##the lcd is larger than the previous model , the nx , and has a bright blue backlight which illuminates the screen more successfully than the nx 's green backlight did . 
+scroll wheel[+2]##the scroll wheel is easy to use and works great for me , however many have complained that the wheel is cumbersome and difficult to operate . 
+sound[+2]##the sound is excellent as one would suspect from a creative product . 
+eax[+2]##the included eax support is useful at times , especially when you listen to a variety of genres , as it will adjust the equalizer for you which can be a big hassle . 
+enviromental audio[-3]##the environmental audio , however , is almost completely useless and has made most of my songs sound worse than without it ( i encode my songs at 192-256 kbps without variable bit rates . ) 
+signal to noise ratio[+2]##the signal to noise ratio ( the ratio of detectable , useful data to unusable garbage in , say , a radio wave ; a larger stn ratio is better ) is nice and high at 98 decibles , and it should be noted that apple refuses to release the stn ratio of any of the ipods . 
+software[+2]##the software has n't been a hassle for me at all . 
+##i ignored the instruction booklet ( as i do with any product ) and figured out how to organize separate playlists within minutes . 
+##my sister was able to figure it out on her own as well , and she is of average computer competence . 
+##the less computer-saavy might find apple 's software a bit friendlier , though ( i use it at a friend 's house and it does do a lot more for you . ) 
+price[+3]##lastly , the price is fantastic : 
+##i spent $ 269 for my 30gb zx , compared to the $ 299 for a 10gb ipod and the also expensive iriver ihp-120 . 
+##for prospective buyers , i would warn of the following : 1 ) purchase a better pair of headphones as soon as possible , as earbuds sound terrible and are terribly uncomfortable ( this applies to earbuds in general , ) and 2 ) make sure that your mp3s have id3 tags on them , that when when they are loaded into the playlist they will automatically sort themselves . 
+##if you want great sound quality , do n't want to spend an arm and a leg per-gigabyte , do n't mind being something of an iconoclast among many ipod users , and are willing to sacrifice a few cubic centimeters of your personal space for a large discount , then i would suggest the zen xtra for you . 
+[t] it 's pretty good . 
+##read the instuctions - do not plug the zen into your computer until you have installed all the software onto your computer and rebooted it ! ! 
+##( i had no problems since i did this but there seem to be a couple of very bitter reviews further down - maybe they did not do this or maybe there are some very sad ipod owners since they all recomend it instead ) . 
+##and have you seen the price of the ipod extras that you need . 
+##eg 60 $ for a plastic box to hold 4 aaa batteries to increase the use time past 6-8 hrs ( reviewers figures ) 
+software[+2]##i uploaded the drivers and new software in 15 minutes - no crashes or problems . 
+##transferred the zens new software onto it in about 10 seconds . 
+##it is transferes a song in about 2 seconds . 
+usb 2.0[+3]##usb 2.0 - very fast 
+earbud[-3]##yeah i agree the earbuds are pretty crap , replace them . 
+sound[+3]##but the sound is very good ( and loud ) and works well on my portable speakers . 
+recharger[+1]##and for those that are intrested the recharger works anywhere in the world ( and is quite small ). 
+look[+3],size[+2][u],weight[+2][u]##it looks very cool , and seems quite small to me and very light . 
+scroll[+1]##the scroll button seems ok , i have no problems with it . 
+player[+3][u]##i am very pleased so far . 
+##i had all my files already on my pc in wma format ( 200 cd 's ). 
+##so far so good , no problems , no conversions . 
+use[+3]##very simple to use . 
+##the reason it does not get 5 stars 
+battery[-1]##1 ) a spare battery would have been great . 
+game[-1]##2 ) no games - it has a cool screen - why not use it . 
+work[-1]##3 ) it does not work automatically like a hard drive when you connect it to your computer , like some players 
+use[+3]##all in all suprisingly easy to use . 
+[t] a great player for the price . 
+##summary : 
+sound quality[+3],size[+2],price[+2]##lots of flaws , but exceptional sound quality , hd size , and price make it a good buy . 
+##pros : 
+sound[+2]##excellent sound - i found the music reproduced faithfully through the jukebox . 
+##there was no distortion and it sounded great , especially with eax environmental audio enabled . 
+transfer[+2]##transfer through windows explorer - windows recognizes the jukebox as an additional hard disk , so it allows you to simply drag and drop files from windows explorer to a folder for the nomad . 
+##i found this to be a much easier method of transferring my music to the nomad than using their software . 
+##however , it does n't register instantly as a hard drive like other players . 
+##you have to install the software to the computer you 're transferring to , instead of just connecting it with a usb connection . 
+##this would have been much easier . 
+##the nomad can hold any type of file , not just mp3 , so you can use it as a portable hard disk . 
+transfer[+3]##i found it very useful for transferring large files to another computer . 
+##this almost made it worth the price alone . 
+##i was able to easily copy 2gb worth of video files from my computer , and then transfer them to a friend 's . 
+storage[+3]##huge storage space - even at 320kbs , you can store a ton of songs on this thing . 
+##30gb is more than enough for most people . 
+transfer[+2]##having usb 2.0 makes for very fast transfers . 
+##it only took me about 10 seconds to transfer a 200mb file . 
+##it took maybe 15 minutes to transfer 1000 songs . 
+##cons : 
+navigation[-2]##navigation system - the zen xtra uses id3 tags that are embedded in the mp3 files to organize your songs . 
+##this is great as long as all of your music have id3 tags , and if you 've downloaded your songs off the internet , many probably do n't . 
+##it would have been much easier to use a windows explorer style navigation system . 
+##you can 't simply open up a folder from the player and play all the songs in it . 
+##whe you transfer your songs to the jukebox , it dumps all of them into a single folder , and then sorts them by the id3 tags. 
+fm receiver[-2]##fm receiver - it has none . 
+##i would be nice to have a simple fm receiver so i could pick up local stations . 
+##that way i could get rid of a walkman alltogether . 
+construction[-2]##cheap construction - they should have made the player out of hard plastic and put some rubber on the corners . 
+feel[-1]##the player feels very delicate , as if i 'm holding an actual hard drive . 
+##i 'm not sure if it would survive a fall from 3 feet . 
+feel[-1]##as a portable player , it should feel a bit more durable . 
+##the top of the player is a thin metal piece that covers up the battery and is removable . 
+##i could crush this thing in half with two fingers if i wanted to . 
+##this is not a player you can take jogging . 
+play[-2]##the songs do n't play one after another like on a cd . 
+##you have to add them to the playing list . 
+##i can 't simply bring up my entire list of songs , click play , and then hit next . 
+##you have to add all the songs to a play list . 
+##there is probably an easier way to do this , i just have n't found it yet . 
+software[-3]##software - the software is crap . 
+rip cds[+2]##i use it for ripping cds , which it does a pretty good job of .
+software[-3][p]##otherwise , it is difficult to figure out and awkward . 
+##like most people , i do n't want to read the instructions , i just want to use it . 
+instruction[-1]##even after reading some of the instructions , it 's still hard to figure out . 
+##i would recommend replacing the existing software with the " notmad explorer , " which is simpler to use and can be found on the internet . 
+line out jack[-1]##no line out jack - as i said , there is none . 
+##the headphone jack acts as a pseudo line out jack . 
+##so you can plug your nomad directly into your stereo or use a car adapter , but you do n't get the quality from a true line out jack . 
+line out jack[-1]##it sounds decent , but i would estimate you get maybe 80 % of the quality that you would from a true line out jack . 
+control[-2]##controls are a bit awkward . 
+##the controls definately took some getting used to . 
+control[-2][u]##it was n't as easy to fast forward or pause a song than it was with a regular walkman . 
+##when i first had it i kept finding myself having to look at the nomad to figure out where the skip button was . 
+##a sliding old fashioned volume knob would also have been easier than the digital version that was included . 
+##i want to have instant access to the volume , not have to hold down a button and have to wait a half second for the player to register it . 
+headphone[-3]##crappy headphones . 
+earbud[-2]##the included earbuds were uncomfortable . 
+##i would replace them with some better sounding and more comfortable phones . 
+navigation[-3]##difficult navigation - i wo n't necessarily say " difficult , " but i do n't enjoy the scrollwheel to navigate . 
+navigation[-2]##it is a bit cumbersome , and i can 't get to the songs i want as quickly . 
+navigation[-3][p]##i think this is it 's biggest flaw . 
+##i would much more have preferred a keypad-type navigator like found on dvd remotes . 
+control[-1]##up , down , left , and right would have given me better control . 
+scroll wheel[-2]##if you hold down the scroll wheel too long ( which is common if you have a lot of songs to sort through ) , it will get " stuck " rapidly going through the songs and wo n't stop until several seconds after you let your finger off of it . 
+##case - the nomad comes with a leather holding case . 
+case[-1]##it would have been much nicer if it had a window so you could see the screen , and if the button did n't cover up the ac jack . 
+##that way i could keep it in the case all the time . 
+case[-3]##as it stands now , the case is pretty useless unless you 're packing the player up for travel , or if you load up all your songs beforehand . 
+##you can cut up the case a bit with an xacto knife and make it useable though . 
+player[+2][p]##overall , i feel that it 's a decent buy , and am happy that i own it . 
+sound[+2], price[+2], player[-1]##i am willing to overlook it 's problems to get superior sound quality and low price , although i feel the player has a lot of room for improvement . 
+[t] good for the money , but software is awful . 
+##after looking over multiple large mp3 players , i decided to get this one . 
+price[+2]##for the price and size and features , you can 't beat the price . 
+##a 10 gb ipod is just as much and i have heard from multiple sources that the ipod is very loud and you can heard the hard drive everytime it spins , accesses files or does antyhing . 
+##i think the reson for the creative being larger is for sound dampening and protection , whihc is a plus , but then again it is only speculation . 
+button[+3],interface[+3]##the buttons and interface are very easy to use . 
+click buttons[+3], display[+2]##simple click buttons , back buttons volume and display are very easy to read , access and use . 
+software[-2]##but the major problem i had was with the software . 
+##you are not able to simply import files , but rather you have to go through multiple steps to find them . 
+instruction[-2]##the instructions that come with it do n't explain how to make things simple . 
+sync[-2]##the quick sync is n't any good becuase it either needs to be configured properly or just is n't very useful . 
+transfer[-2]##i tried to make sense of the file transfer program and just got more confused . 
+##i tried to take a cd and simply rip it onto a hard drive and then transfer into the player . 
+##well that was not a simple task . 
+##i ended up suing windows player to make mp3 's ( actually wma files ) and then using the probram to transfer . 
+##i think the lack of the mp3 player being able to run without special software is also a downer , becuase it makes it more cumbersome for people less computer illiterate . 
+##buy this for the storage and price , avoid it if you know nothing about computers . 
+[t] buy this instead of an ipod . 
+mp3 player[+2]##with this mp3 player you get much more memory for much less than an ipod . 
+##an ipod with the same amount of memory is $ 150 cheaper . 
+##the reason for this the ipod has " a better user interface " . 
+interface[+3]##i have found that the interface on the nomad is very easy to use if you have a basic knowledge of a computer . 
+##also the ipod has games on it . 
+##games are ok for a cell phone , but mp3 's are for music . 
+[t] this thing roxxorz . 
+##i purchased this player last week . 
+##i did a little research on the web and this is the player i decided on . 
+##i refuse to buy anything made by apple and the nomad is about $ 200 cheaper anyway . 
+product[+2]##i have had no problem what-so-ever with this product . 
+software[+2]##the software installed flawlessly and without any problems on my windows 2k machine . 
+headphone[-1]##the headphones are n't the best , but you can really expect much out of the small headphones you insert in the ear cavity . 
+battery life[+2]##the battery life seems good , takes very lttle time to charge , it uploads mp3s quickly and there is no delay between songs . 
+navigation[+2]##took me a few tries to get use to the navigation , but it 's a very user friendly player imo . 
+player[+2]##i have n't messed with the firmware at all , the player worked perfect for me right out of the box . 
+product[+2]##all-in-all , this is another excellent creative product . 
+##if you have the money and need 40 gb , this is the player for you . 
+size[+1][u],weight[+1][u],look[+2],display[+2]##it 's small , light and nice looking and the display is decent as well . 
+product[+2]##i would recommend this product to anyone . 
+[t] it does n't get any better than this . 
+player[+3]##before asking for the zen xtra specifically for christmas i researched many different mp3 players but finally decided on this one , and now that i have it i could n't be happier and i 'm convinced it 's the best one out there . 
+software[+2]##many people have written about the software being its one downfall , personally i have n't had a single problem with the software , i 'm running windows me . 
+cd rip[+3]##the cd ripping to mp3 is so easy , and you can even rip the cd directly to the mp3 player , so it wo n't take up space on your pc hard drive . 
+software[+2]##the software runs smooth , it 's nice to look at , it 's very organized , easy to follow and makes things very simple . 
+control[+2]##the controls on the player are very simple , no need for a manual . 
+player[+2],sound[+3]##the player is fast and sounds great , it also has many options like slowing or speeding up the music , or making it sound like you 're hearing the music in a huge auditorium . 
+battery[+2]##the battery lasts very long when playing music , but writing files to the player drains the battery fast , so you need to have it plugged into an outlet when sending files . 
+playlist[+2]##playlists can be made on the fly , without aid of a computer , and you can use play modes like shuffle and repeat for your ' now playing ' selections or playlists . 
+software[+3],player[+3]##the software could n't be better and the mp3 player works like a dream , i could n't give this anything but a 5 , i wish there was a 6 . 
+[t] difficult to manage large library . 
+##i purchased and returned this product , but not because of any glaring flaws in the design . 
+player[+3][p]##it is an extremely cool gizmo . 
+##in fact , everyone who saw it thought i was " the man " and wo n't believe i returned it . 
+##so what 's the problem ? 
+##i made the mistake of thinking i could easily manage my mp3 library with this device . 
+##i initially loaded about 3700 tracks with the intent of ripping the majority of my remaining cds to mp3 . 
+##i quickly discovered that the nomad was n't going to work for me . 
+##the reasons below will be true for any product in this category . 
+##here 's why : 
+##1 . i do n't need the nomad at the office . 
+##i have my mp3 's stored on my workstation . 
+##2 . i do n't need the nomad at home for the same reason ( although using it to sync between the two pc 's might be a reason enough to get it . ) 
+##3 . it 's a hazard in the car . 
+navigation[+2],scroll[-2]##the navigation is nice enough , but scrolling and searching through thousands of tracks , hundreds of albums or artists , or even dozens of genres is not conducive to save driving . 
+##( throw a cell phone and you 're asking for trouble . ) 3a . 
+playlist[-2]##creating playlists using the included software to minimize issue 3 was n't as easy as i would have liked . 
+##the bottom line : 
+##if i have to get into making playlists to avoid rear-end collisions , i 'll just buy a regular portable cd/mp3 player and burn myself collections of about 120 tracks per disk . 
+##sure it 's " old school " to carry a cd wallet around , but it will be easier to manage and i 'll save around 250 bucks . 
+##one major complaint : 
+sound quality[-2]##my only significant complaint is sound quality . 
+eax[-2]##the eax sound enhancement feature did n't do enough for me and the custom eq was a limited 5 band eq . 
+##this did not give me enough control . 
+##i wanted to use the nomad with a cassette style car adapter . 
+sound quality[-2]##i was unable achieve a sound quality on par with my simple portable cd player with " bass boost . " 
+##the sound quality of my cd player is superior in this setting to the nomad . 
+##one minor complaint : 
+##the documentation says to extend battery life , do not fill player to capacity . 
+##gee ... thanks a lot creative . 
+[t] great product . 
+##well in the beginning i was asking around for mp3 players . 
+##so then i came across the ipod ( 10 gb ) . 
+##so i was all excited about the ipod but then the day before i went to best buy to check out the other mp3 players and i came across this one . 
+##well i decided to get this one . 
+product[+3]##well i have to say that this product is very good i mean it might be a little big but it still fits in your pocket . 
+product[+2]##well surely this is a product that i recommend someone in getting rather than any other mp3 player ( at that size and the price ) . 
+program[-2]##well just one con - its not really plug and play at first i mean its very confusing to start the program but one you do it , it will be a breeze . 
+##enjoy . 
+[t] in a word ... amazing i got this for christmas . 
+##i was going to get a 10gb ipod , but after looking at the 10 day warranty for ipod and www.ipodsdirtysecret.com ( battery lasts 18 months ; 
+##it costs like 200 dollars to replace - now you mail it off to get the battery replaced for like 99 .. . 
+##what a big improvement ... lol ) and the fact that lots of people have had problems with ipods on windows computers , i realized this is a much better buy . 
+price[+2][u], player[+2]##not only is it more affordable , but its a better player for windows , which is what i have . 
+##anyway , on with the review . 
+##so far i 've only had it since christmas , so i cant tell you much about the battery life . 
+battery life[+2]##it hasnt gone below the second notch ( i charge mine whenever i 'm at home and not using it ) , so the battery life seems fine ( so far ). 
+##software : for the people who complain about software , please , stop complaining . 
+##once you hook the thing up to the computer ( via the usb cable ) , the machine instantly recognizes the fact that it 's there & installs the drivers . 
+##from there , you transfer files from your computer to the mp3 player ( with the help of the media sniffer .. . read the manual ). 
+id3 tag[-2]##my only complaint would be that you need id3 tags & that takes a while to do if your mp3 files do n't have them . 
+##if you 're copying cds with windows media , its really simple to give your songs id3 tags , so thats what i do . 
+transfer[+2]##oh ... and file transfers are fast & easy . 
+##the player : it 's silver . 
+weight[-1]##a little weighty ( 9 ounces ... no biggie ) , but otherwise fine . 
+##people complain about the scroll wheel , but its not a big deal at all ( though it is just a little annoying at times ) . 
+scroll wheel[+1]##it 's easy . 
+button[+2]##the buttons are easy to use , and its easy to navigate . 
+backlight[+2]##the big backlight makes things easy to see , and the writing is big enough for people to see . 
+eax[+2]##my favorite thing about the nomad is the eax feature . 
+##you can customize bass , etc. like usual , but also you can customize the sound of the player ( like how it would sound in a concert hall , jazz club , etc ). 
+eax[+3][p]##its really cool . 
+sound quality[+3]##sound quality is amazing. i was expecting worse , but its really good ( especially if your files have good sound quality ) . 
+song speed[+3]##you can also slow a song down & speed it up , which is cool too . 
+earbud[-3]##but the earbuds suck ! 
+##buy new ones asap. every time you move your face or something they pop out . 
+##for a 250 dollar player , they could have thrown in nice headphones . 
+##a remote would have been cool too ... but lets not push it . 
+##oh ... one more thing . 
+case[-2]##i forgot , the case does n't fit . 
+case[-2]##my case doesnt close ... maybe mine was just faulty , but the case isnt that great . 
+##so far the player froze on me once ( i started pushing buttons before it loaded ) but since is hard drive based - you have to expect that . 
+##so all you do is stick a pin or something small in the reset button & you 're golden . 
+storage[+2][u]##also , you can store data on it , which is a plus. for all you people who want to buy an ipod just to say you have an ipod , do n't bother , this is a much better buy . 
+##hope i helped ! 
+[t] simply doesnt shine . 
+##i 'd like to start off saying that before this product i was using an archos jukebox recorder .. . 
+##what made this product so great to me was the open source os called rockbox .. . 
+##based on hardware one could assume the archos players were horrible ( which by hardware standards .. . they were ) .. . 
+##but because a few fine men and women took the time to create the upstanding rockbox software , the archos became a top notch player for me with intuitive features out the wazoo .. . 
+##now we come to the zen xtra .. . 
+player hardware[+2]##first i 'll start off by saying that this players hardware is pretty good .. . 
+sound[+3],size[-1][u]##the sound is indeed excellent and the form factore is not bad ( but still rather larger than i had expected ) .. . 
+software[-2]##what really made this a mediocre mp3 player for me was the software . 
+##not just the transfer software ( which was a hellishly horrible experience ) but also the player 's software . 
+##first of all , many actions that the player utilizes do n't make sense . . 
+bookmark[-2]##bookmarks for example , are an excellent feature ... but not on this player .. . 
+bookmakr[-2]##rather than creating a directory for bookmarks to be found in one area , the user must actually find the track where the bookmark was made . . 
+bookmark[-2]##this makes no sense and sort of defeats the purpose of audio bookmarks .. . 
+playlist[-3]##the dynamic playlists ( " now playing " , i belive creative calls it ) feels very awkward at times and some menus simply take to long to get to and operate .. . 
+##well , anyway i could go on and on on why this player did n't meet my expectations .. . 
+##i 'll just say this .. . 
+##for the average music listener not expecting much ... this may be a satisfactory mp3 player ... 
+##but for someone who cares about thier music collection and wants fluid and responsive playback .. . i can 't recommend this product . 
+[t] excellent product with a few minor problems . 
+##i became interested in getting a mp3 player when i got a new work computer ; while my office bars the addition of any non-work software , it does n't care if you load cds onto the hard drive . 
+##over time , i loaded hundreds of cds onto the computer , and the idea of carrying around all of my music with me became attractive . 
+##many people recommended the ipod , and i borrowed one from a friend . 
+price[+2][u]##while the ease of use was very impressive , i was put off by the price -- about $ 130 more than what i paid amazon for this player . 
+##also , there is the need to send the ipod to replace the batteries when they die ( which they will ). 
+nomad[+3]##i have had the nomad jukebox for about three weeks now , and i am very happy with it . 
+weight[-1][u],battery life[+1]##it 's only slightly heavier than the ipod , and has a longer battery life . 
+storage capacity[+2]##the storage capacity is great for me -- 
+##i have a large but not huge cd collection and have loaded everything i want to listen to on it and still have 13 gigabytes free . 
+control[-1]##the controls are somewhat harder to use than the ipod , but i have gotten use to them , and even at the beginning did not think would justify the huge difference in price . 
+load[-1][u]##loading cds was somewhat time-consuming , but i think it would have been with the ipod as well . 
+##i had never loaded my cds on to my home computer , using my work computer instead . 
+##my office would not let me put the software on to my work computer . 
+##this meant that i had to take all my cds and do in a fairly short period of time what i had done over a year at work . 
+##if the music had been on my home computer , the transfer would have been accomplished very quickly . 
+##i have an older computer , running windows 98 se , and so those of you with something more recent would find the process even quicker . 
+tag[-1],software[-1]##my only reservations about this product concern the tagging process and the way it interacts with the software . 
+##when you load a disc , you go to an internet cite for the insertion of the names for the cd and the tracks . 
+##while the listing process is accurate for track names ( unlike windows ' reliance on the amg , which frequently gets track listings out of order ) , the results can be odd . 
+##the cd will be classified into a number of genres , and in multidisk sets , you can get separate classifications for different disks by the same artist and the same performance . 
+##for example , jimi hendrix 's 2 cd live at the fillmore east had one cd classifed as classic rock and the other psychidelic rock . 
+##perhaps the weirdest was one of bruce springsteen 's cds from the tracks set being classified as goth rock . 
+##you can change any of these , but need to be paying attention when the information is downloaded before you copy it . 
+##a somewhat more troublesome problem is that the internet site will sometimes give different discs of the same set slightly different names . 
+##this will cause the discs not to show up together when you are looking for them on the nomad . 
+##again , you can change this , but it 's harder to spot a minor variation in the title when you do n't have the title of the other disk in front of you . 
+tag[-2]##other tagging problems result ( i think ) from the nomad 's operating system . 
+##if you have two tracks with exactly the same name on one disk , it will not copy both -- it gives you the option of skipping the second or overwriting the first with the second . 
+##this is rarely a problem with any kind of popular music , but can be troublesome with classical music where tracks are identified by tempi . 
+##i also had it happen when recording a jazz set where there were a number of outtakes of the same song without numbering them separately . 
+##the way to fix this is to rename the track by adding a number yourself to the end of the track listing . 
+software[-2]##also , i can 't understand why the software does not ignore " the " when it lists the cds in alphabetical order . 
+playlist[-2]##finally , making playlists from the computer can be complicated because the tracks are listed individually , and are organized by cd , which are not listed but are organized in alphabetical order . 
+##in other words , to locate a track using the software on the computer and add it to a playlist , you must know the name of the cd it appears on and then find the track by locating the location of the unlisted cd by looking for tracks that appear on it . 
+##you do n't have this problem if you make your playlist from the nomad , where cds are listed separately . 
+##you need your computer , however , if you want to add tracks to a playlist . 
+##these are minor problems , and i list them to save anyone else the trouble of discovering them . 
+##had i not been in such a hurry to load cds , i would have spotted them sooner . 
+##also , if i had already loaded and tagged by cds on my home computer , this would not have been an issue . 
+product[+3][p]##the bottom line for me is that i am very happy with this product . 
+##apple 's ipod is dominant now , but i have to wonder whether the price differential will mean that in 3 or 4 years its market share will drop significantly . 
+[t] poor substitute for an ipod . 
+##simply not as friendly for functional as an ipod . 
+##even better , ipod integrates perfectly with itunes so that managing music is a snap . 
+[t] zen versus ipod . 
+##i just got a 40gb ipod to replace my zen ( a 20gb model ) . 
+##while the ipod 's form factor is much nicer , here 's where the zen is better . 
+##software : 
+software[+2]##a lot of people complain about the creative software , but i actually find creative mediasource organizer to have some strengths over itunes . 
+sync[+1]##first , the zen lets you sync to more than one computer . 
