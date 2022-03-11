@@ -40,7 +40,7 @@ class Instructor:
             self.model = opt.model_class(bert, opt).to(opt.device)
         else:
             tokenizer = build_tokenizer(
-                fnames=[opt.dataset_file['train'], opt.dataset_file['test']],
+                fnames=[opt.dataset_file['train'], opt.dataset_file['tests']],
                 max_seq_len=opt.max_seq_len,
                 dat_fname='{0}_tokenizer.dat'.format(opt.dataset))
             embedding_matrix = build_embedding_matrix(
@@ -50,7 +50,7 @@ class Instructor:
             self.model = opt.model_class(embedding_matrix, opt).to(opt.device)
 
         self.trainset = ABSADataset(opt.dataset_file['train'], tokenizer)
-        self.testset = ABSADataset(opt.dataset_file['test'], tokenizer)
+        self.testset = ABSADataset(opt.dataset_file['tests'], tokenizer)
 
         if opt.device.type == 'cuda':
             logger.info('cuda memory allocated: {}'.format(torch.cuda.memory_allocated(device=opt.device.index)))
@@ -235,15 +235,15 @@ def main():
     dataset_files = {
         'twitter': {
             'train': './datasets/acl-14-short-data/train.raw',
-            'test': './datasets/acl-14-short-data/test.raw'
+            'tests': './datasets/acl-14-short-data/tests.raw'
         },
         'restaurant': {
             'train': './datasets/semeval14/Restaurants_Train.xml.seg',
-            'test': './datasets/semeval14/Restaurants_Test_Gold.xml.seg'
+            'tests': './datasets/semeval14/Restaurants_Test_Gold.xml.seg'
         },
         'laptop': {
             'train': './datasets/semeval14/Laptops_Train.xml.seg',
-            'test': './datasets/semeval14/Laptops_Test_Gold.xml.seg'
+            'tests': './datasets/semeval14/Laptops_Test_Gold.xml.seg'
         }
     }
     input_colses = {

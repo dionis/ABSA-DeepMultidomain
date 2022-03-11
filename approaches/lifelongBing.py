@@ -8,6 +8,7 @@ from copy import deepcopy
 import utils
 from sklearn import metrics
 from torch.autograd import Variable
+import re
 
 ########################################################################################################################
 ##
@@ -77,6 +78,9 @@ class Appr(object):
         self.learning_rate = 0.001
         self.exp_pow = torch.tensor(2)
         self.exp_pow = 2
+
+        if self.model != None:
+            self.task_size = 1 if self.model.taskcla == None else len(self.model.taskcla)
 
 
         if self.model != None:
@@ -148,14 +152,16 @@ class Appr(object):
         if _new_optimize != None: self.optimizer = _new_optimize
 
     def _get_optimizer(self,lr=None):
-        if lr is None: lr=self.lr
+        if lr is None: lr = self.lr
 
         print("!!!!New optmization!!!!!")
-        if self.optimizer != None:
-            print("--------Optmization---------")
-            return self.optimizer
+        # if self.optimizer != None:
+        #     print("--------Optmization---------")
+        #     return self.optimizer
 
-        return torch.optim.SGD(self.model.parameters(),lr=lr)
+        # return torch.optim.SGD(self.tensorVariables, lr=lr)
+        # return torch.optim.SGD(self.model.parameters(),lr=lr)
+        return self.opt.optimizer(self.model.parameters(), lr=self.opt.learning_rate, weight_decay=self.opt.l2reg)
 
     def train(self, t, train_data_loader, test_data_loader, val_data_loader):
         best_loss=np.inf
@@ -180,6 +186,16 @@ class Appr(object):
         ##
         ##  LA VARIABLE tm se coloca entre los valores a optimizar??????
         ##
+
+        print(
+            " ###### Update status of last layer weight in current task(domain) AVOID Stocastic Gradient ########")
+
+        for name, var in self.model.named_parameters():
+            if name.find("model.last.") != -1:
+                var.requires_grad_(False);
+                if re.match("model.last." + str(t), name) != None:
+                    print("Variable " + name + " update to SGD")
+                    var.requires_grad_(True);
         self.optimizer = self._get_optimizer(lr)
         # Loop epochs
         for e in range(self.nepochs):
@@ -195,24 +211,29 @@ class Appr(object):
             clock1 = time.time()
 
             #print("2")
-            train_loss, train_acc, train_recall, train_f1 = self.eval_withregsi(t, test_data_loader)
+            train_loss, train_acc, train_recall, train_f1, train_cohen_kappa = self.eval_withregsi(t, val_data_loader)
 
             #print("3")
             clock2 = time.time()
 
-            print('| Epoch {:3d}, time={:5.1f}ms/{:5.1f}ms | Train: loss={:.3f}, acc={:5.1f}% |'.format(e + 1,
-                                                                                                        1000 * self.sbatch * (
-                                                                                                            clock1 - clock0) / train_data_loader.__len__( ),
-                                                                                                        1000 * self.sbatch * (
-                                                                                                            clock2 - clock1) / train_data_loader.__len__( ),
-                                                                                                        train_loss,
-                                                                                                        100 * train_acc),
-                  end='')
+            dataset_size = len(val_data_loader.dataset)
+            print('| Epoch {:3d}, time={:5.1f}ms/{:5.1f}ms | Train-Val: loss={:.3f}, acc={:5.1f}, f1={:5.1f}, cohen_kappa={:5.1f}%|'.format(
+                e + 1,
+                1000 * self.sbatch * (
+                    clock1 - clock0) / dataset_size,
+                1000 * self.sbatch * (
+                    clock2 - clock1) / dataset_size,
+                train_loss,
+                100 * train_acc,
+                100 * train_f1,
+                100 * train_cohen_kappa),
+                end='')
 
             # Valid
             #print("4")
-            valid_loss, valid_acc , valid_recall, valid_f1= self.eval_withregsi(t, val_data_loader)
-            print(' Valid: loss={:.3f}, acc={:5.1f}% |'.format(valid_loss, 100 * valid_acc), end='')
+            valid_loss, valid_acc , valid_recall, valid_f1, valid_cohen_kappa = self.eval_withregsi(t, test_data_loader)
+            print(' Test: loss={:.3f}, acc={:5.1f}, f1={:5.1f}, cohen_kappa={:5.1f}%|'.format(valid_loss, 100 * valid_acc, 100 * valid_f1,100*valid_cohen_kappa),
+                  end='')
 
             #print("5")
             # Adapt lr
@@ -235,13 +256,16 @@ class Appr(object):
             #print("6")
             #self.find_noleaf(self.model.named_parameters())
 
-        # Restore best
-        #utils.set_model_(self.model,best_model)
 
-        # Update old
-        # self.model_old=deepcopy(self.model)
-        # self.model_old.eval()
-        # utils.freeze_model(self.model_old) # Freeze the weights
+        print(" ###### Show status of last layer weight in current task(domain) ########")
+        toViewLasLayer = []
+        for name, var in self.model.named_parameters():
+            if name.find("model.last.") != -1:
+                print("Requiere Grand ==> " + str(var.requires_grad))
+                print("Variable name " + name + " == " + str(var.data))
+
+                toViewLasLayer.append((name, var))
+
 
         return
 
@@ -258,6 +282,9 @@ class Appr(object):
 
             self.model.insertKnowBase(ASAt, CSEt)
 
+        loop_size = 0
+        global_step = 0
+        n_correct, n_total, loss_total = 0, 0, 0
 
         for i_batch, sample_batched in enumerate(train_data_loader):
             print("Batch size: " + str (sample_batched.__len__()))
@@ -275,8 +302,8 @@ class Appr(object):
 
             startDateTime = datetime.now()
             outputs,_=self.model.forward( task, inputs)
-            print('Train DataTime', datetime.now() - startDateTime)
-            print("Train forward")
+            #print('Train DataTime', datetime.now() - startDateTime)
+            #print("Train forward")
             self.getMemoryRam()
 
 
@@ -287,11 +314,16 @@ class Appr(object):
             self.optimizer.zero_grad()
             loss.backward()
 
-            #print("1.6 ")
-            #torch.nn.utils.clip_grad_norm_(self.model.parameters(),self.clipgrad)
+            n_correct += (torch.argmax(output, -1) == targets).sum().item()
+            n_total += len(output)
+            loss_total += loss.item() * len(outputs)
+            if global_step % self.opt.log_step == 0:
+                # train_acc = n_correct / n_total
+                train_loss = loss_total / n_total
+                # print('loss: {:.4f}, acc: {:.4f}'.format(train_loss, train_acc))
+                print('loss: {:.4f}'.format(train_loss))
 
-            # for i, (name, var) in enumerate(self.tensorVariables):
-            #     self.small_omega_var[name] -= self.lr * var.grad  # small_omega -= delta_weight(t)*gradient(t)
+
             self.optimizer.step()
 
 
@@ -345,8 +377,8 @@ class Appr(object):
             # Forward
             startDateTime = datetime.now()
             outputs,_ = self.model.forward(task, inputs)
-            print('Eval DataTime', datetime.now() - startDateTime)
-            print("Eval forward")
+            #print('Eval DataTime', datetime.now() - startDateTime)
+            #print("Eval forward")
             self.getMemoryRam()
 
 
@@ -355,10 +387,13 @@ class Appr(object):
             _, pred = output.max(1)
             hits = (pred == targets).float()
 
+            n_correct += (torch.argmax(output, -1) == targets).sum().item()
+
             # Log
-            total_loss += loss.data.cpu().numpy()*sample_batched.__len__()
+            current_batch_size = len(pred)
+            total_loss += loss.data.cpu().numpy() * current_batch_size
             total_acc += hits.sum().data.cpu().numpy()
-            total_num += len(sample_batched)
+            total_num += current_batch_size
 
             if t_targets_all is None:
                 t_targets_all = targets.detach().numpy()
@@ -372,7 +407,11 @@ class Appr(object):
         f1 = metrics.f1_score(t_targets_all, np.argmax(t_outputs_all, -1), labels=[0, 1, 2], average='macro')
         recall = metrics.recall_score(t_targets_all, np.argmax(t_outputs_all, -1), labels=[0, 1, 2],
                               average='macro')
-        return total_loss / total_num, total_acc / total_num, recall, f1
+
+
+        cohen_kappa = metrics.cohen_kappa_score(t_targets_all, np.argmax(t_outputs_all, -1))
+
+        return total_loss / total_num, total_acc / total_num, recall, f1, cohen_kappa
 
 ###-------------------------------------------------------------------------------------------------------------
     def eval(self, t, test_data_loader):
@@ -413,28 +452,35 @@ class Appr(object):
     def setWordInDomain(self, task, word_vocabulary):
         self.wordInDomVocabulary[task] = word_vocabulary
 
-    #Serialize model, optimizer and other parameters to file
+        # Serialize model, optimizer and other parameters to file
+
     def saveModel(self, topath):
-           torch.save({
-                'epoch': self.nepochs,
-                'model_state_dict': self.model.state_dict(),
-                'optimizer_state_dict': self.optimizer.state_dict(),
-                'loss': self.ce,
-                'learning_rate': self.lr,
-                'batch':self.sbatch
-            }, topath)
+        torch.save({
+            'epoch': self.nepochs,
+            'model_state_dict': self.model.get_Model().state_dict(),
+            'optimizer_state_dict': self.optimizer.state_dict(),
+            'loss': self.ce,
+            'learning_rate': self.lr,
+            'batch': self.sbatch,
+            'task_size': self.task_size
+        }, topath)
 
-           return True
+        return True
 
 
-    #Unserialize model, optimizer and other parameters from file
+
+        # Unserialize model, optimizer and other parameters from file
+
     def loadModel(self, frompath):
-
         if not os.path.exists(frompath):
             return False
         else:
             checkpoint = torch.load(frompath)
-            self.model.load_state_dict(checkpoint['model_state_dict'])
+            self.model.get_Model().load_state_dict(checkpoint['model_state_dict'])
+
+            self.optimizer = self.opt.optimizer(filter(lambda p: p.requires_grad, self.model.parameters()),
+                                                lr=self.opt.learning_rate, weight_decay=self.opt.l2reg)
+
             self.optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
             self.ce = checkpoint['loss']
             return True
@@ -551,4 +597,4 @@ class Appr(object):
         pid = os.getpid()
         py = psutil.Process(pid)
         memoryUse = py.memory_info()[0] / 2. ** 30  # memory use in GB...I think
-        print('memory use:', memoryUse)
+        #print('memory use:', memoryUse)

@@ -130,7 +130,7 @@ class Appr(object):
         return total_loss/total_num
 
     def eval(self,t,x,y):
-        # This is used for the test. All tasks separately
+        # This is used for the tests. All tasks separately
         total_loss=0
         total_acc=0
         total_num=0

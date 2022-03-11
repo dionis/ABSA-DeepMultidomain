@@ -16,7 +16,7 @@ class Inferer:
     def __init__(self, opt):
         self.opt = opt
         self.tokenizer = build_tokenizer(
-            fnames=[opt.dataset_file['train'], opt.dataset_file['test']],
+            fnames=[opt.dataset_file['train'], opt.dataset_file['tests']],
             max_seq_len=opt.max_seq_len,
             dat_fname='{0}_tokenizer.dat'.format(opt.dataset))
         embedding_matrix = build_embedding_matrix(
@@ -65,7 +65,7 @@ if __name__ == '__main__':
     opt.dataset = 'restaurant'
     opt.dataset_file = {
         'train': './datasets/semeval14/Restaurants_Train.xml.seg',
-        'test': './datasets/semeval14/Restaurants_Test_Gold.xml.seg'
+        'tests': './datasets/semeval14/Restaurants_Test_Gold.xml.seg'
     }
     opt.state_dict_path = model_state_dict_paths[opt.model_name]
     opt.embed_dim = 300

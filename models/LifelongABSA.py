@@ -10,6 +10,7 @@ import torch.nn as nn
 from torch.nn.parameter import Parameter
 from layers.squeeze_embedding import SqueezeEmbedding
 import torch.nn.functional as F
+import re
 
 class LifelongABSA(nn.Module):
     
@@ -95,7 +96,7 @@ class LifelongABSA(nn.Module):
 
         s_output = torch.matmul((x + o_lifelog), self.W)
         if self.L2MN == True:
-           print ("Execute L2MN algorithm ")
+           #print ("Execute L2MN algorithm ")
            #Only obtein the real index without 80
            faPosVector = self.getFaPositiveVector(text_raw_without_aspect_indices, aspect_indices)
            faPosVectorTensor = torch.tensor(faPosVector, dtype=torch.float32 , requires_grad=False)
@@ -311,3 +312,4 @@ class LifelongABSA(nn.Module):
 
     def set_Optimizer(self, newoptimizer):
         self.optimizer = newoptimizer
+

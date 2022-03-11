@@ -33,11 +33,13 @@ from models.lcf_bert import LCF_BERT
 from models.lcf_bert_hat import LCF_BERT_HAT
 from models.aen_hat import AEN_BERT_HAT
 
+
+import neuralnet_pytorch as nnt
+
+
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 logger.addHandler(logging.StreamHandler(sys.stdout))
-
-
 
 
 
@@ -48,16 +50,17 @@ class Instructor:
             self.tokenizer = Tokenizer4Bert(opt.max_seq_len, opt.pretrained_bert_name)
         else:
             self.tokenizer = build_tokenizer(
-                fnames=[opt.dataset_file['train'], opt.dataset_file['test']],
+                fnames=[opt.dataset_file['train'], opt.dataset_file['tests']],
                 max_seq_len=opt.max_seq_len,
                 dat_fname='{0}_tokenizer.dat'.format(opt.dataset))
             embedding_matrix = build_embedding_matrix(
                 word2idx=self.tokenizer.word2idx,
                 embed_dim=opt.embed_dim,
                 dat_fname='{0}_{1}_embedding_matrix.dat'.format(str(opt.embed_dim), opt.dataset))
-
+        print("In Train ==========================================================")
         self.trainset = ABSADataset(opt.dataset_file['train'], self.tokenizer)
-        self.testset = ABSADataset(opt.dataset_file['test'], self.tokenizer)
+        print("In Test ==========================================================")
+        self.testset = ABSADataset(opt.dataset_file['tests'], self.tokenizer)
         assert 0 <= opt.valset_ratio < 1
         if opt.valset_ratio > 0:
             valset_len = int(len(self.trainset) * opt.valset_ratio)
@@ -218,6 +221,54 @@ class Instructor:
 
             return (forwardTrasfer/denominator)
 
+    ####
+    #
+    #  Forgetting Measure from Arslan Chaudhry, Puneet K Dokania, Thalaiyasingam Ajanthan,
+    #  and Philip HS Torr. 2018. Riemannian walk for incremental learning: Understanding forgetting
+    #  and intransigence. In European Conferenceon Computer Vision (ECCV), pages 532–547.
+    ###
+
+    def factorTask(accNew, ivalue, ncla):
+        accuracyResult = np.zeros(ncla - 1)
+        for jValue in range(ncla - 1):
+            accuracyResult.put(jValue, accNew[jValue][ivalue])
+
+        return (accuracyResult.max() - accNew[ncla - 1][ivalue])
+    def forgettingMeasure(accNew, ncla):
+        backwardTrasfer = 0.0
+        if ncla <= 2:
+            return (backwardTrasfer, backwardTrasfer, backwardTrasfer)
+        denominator = 1 / (ncla - 1)
+
+        factorTaskInTest = 0.0
+        for ivalue in range(ncla - 1):
+            factorTaskInTest += Instructor.factorTask(accNew, ivalue, ncla)
+        return (denominator * factorTaskInTest)
+
+    def lastModelAverage(accNew, ncla):
+        backwardTrasfer = 0.0
+        if ncla <= 2:
+            return (backwardTrasfer, backwardTrasfer, backwardTrasfer)
+        denominator = 1 / (ncla - 1)
+
+        factorTaskInTest = 0.0
+        for ivalue in range(ncla - 1):
+            factorTaskInTest += accNew[ncla - 1][ivalue]
+
+        return (denominator * factorTaskInTest)
+
+    def diagonalFinalResult(accNew, ncla):
+        backwardTrasfer = 0.0
+        if ncla <= 2:
+            return (backwardTrasfer, backwardTrasfer, backwardTrasfer)
+        denominator = 1 / (ncla - 1)
+
+        factorTaskInTest = 0.0
+        for ivalue in range(ncla - 1):
+            factorTaskInTest += accNew[ivalue][ivalue]
+
+        return (denominator * factorTaskInTest)
+
     def globallMeasure(accNew, ncla):
         forwardTrasfer = 0.0
         if ncla <= 2:
@@ -257,7 +308,7 @@ class Instructor:
             from approaches import progressive as approach
         elif self.opt.approach == 'pathnet':
             from approaches import pathnet as approach
-        elif self.opt.approach == 'hat-test':
+        elif self.opt.approach == 'hat-tests':
             from approaches import hat_test as approach
 
         elif self.opt.approach == 'ar1':
@@ -269,10 +320,12 @@ class Instructor:
             from approaches import joint as approach
         elif self.opt.approach == 'lifelong':
             from approaches import lifelongBing as approach
+        elif self.opt.approach == 'nostrategy':
+           from approaches import nostrategy as approach
 
         # Args -- Network
         if self.opt.experiment == 'mnist2' or self.opt.experiment == 'pmnist':
-            if self.opt.approach == 'hat' or self.opt.approach == 'hat-test':
+            if self.opt.approach == 'hat' or self.opt.approach == 'hat-tests':
                 from networks import mlp_hat as network
             else:
                 from networks import mlp as network
@@ -288,8 +341,8 @@ class Instructor:
             elif self.opt.approach == 'lifelong' or self.opt.model_name.find("bert") == -1:    #Only for BinLiu's method (Lifelong Learning Memory Networks for Aspect
                                                      #Sentiment Classification)
                   from networks import NotBert  as network
-            elif self.opt.approach == 'hat-test' or self.opt.approach == 'ar1' or self.opt.approach == 'ewc' \
-                    or self.opt.approach == 'si' or self.opt.approach == 'lwf':
+            elif self.opt.approach == 'hat-tests' or self.opt.approach == 'ar1' or self.opt.approach == 'ewc' \
+                    or self.opt.approach == 'si' or self.opt.approach == 'lwf' or self.opt.approach == 'nostrategy':
                   from networks import bert as network
 
                   # from networks import alexnet_hat_test as network
@@ -342,6 +395,7 @@ class Instructor:
 
             recallNew = np.zeros((ncla, ncla), dtype=np.float32)
             f1New = np.zeros((ncla, ncla), dtype=np.float32)
+            kappaNew = np.zeros((ncla, ncla), dtype=np.float32)
 
 
             #If exist save model with same name than model and aproach load first
@@ -423,7 +477,7 @@ class Instructor:
                 for u in range(task + 1):
                     #test_data_loader = DataLoader(dataset=self.testset[u][2], batch_size=self.opt.batch_size, shuffle=False)
                     test_data_loader = test_data_list[u]
-                    test_loss, test_acc, test_recall, test_f1 = appr.eval(u, test_data_loader)
+                    test_loss, test_acc, test_recall, test_f1, test_kappa = appr.eval(u, test_data_loader)
                     print('>>> Test on task {:2d} - {:15s}: loss={:.3f}, acc={:5.1f}% <<<'.format(u,
                                                                                                       self.testset[u][
                                                                                                           0], test_loss,
@@ -434,8 +488,10 @@ class Instructor:
                     lssNew[task, u] = test_loss
 
 
+
                     recallNew[task, u] = test_recall
                     f1New[task, u] = test_f1
+                    kappaNew[task, u] = test_kappa
                 # Save
 
 
@@ -452,26 +508,43 @@ class Instructor:
             print('Save at Lomonaco evaluation measures (Remenber different output file --> ) ' + self.opt.f1_output)
             np.savetxt(self.opt.f1_output, f1New, '%.4f')
 
+            print('Save at Lomonaco evaluation measures (Remenber different output file --> ) ' + self.opt.kappa_output)
+            np.savetxt(self.opt.kappa_output, kappaNew, '%.4f')
+
     ##### End  Source Code Lifelong Learning ########################
             if self.opt.measure == "accuracy":
              backwardTransfer, negativebackward, positivebackward = Instructor.backwardTransfer(accNew, ncla)
             elif self.opt.measure == "recall":
               backwardTransfer, negativebackward, positivebackward = Instructor.backwardTransfer(recallNew, ncla)
-            elif self.opt.measure == "f1":
-              backwardTransfer, negativebackward, positivebackward = Instructor.backwardTransfer(f1New, ncla)
+              backwardTransferF1, negativebackwardF1, positivebackwardF1 = Instructor.backwardTransfer(f1New, ncla)
+
+              forgeetingMesasure = Instructor.forgettingMeasure(f1New, ncla)
+              lastMeasure =Instructor.lastModelAverage(f1New, ncla)
+              diagonalMeasure = Instructor.diagonalFinalResult(f1New, ncla)
+            # elif self.opt.measure == "f1":
+            #   backwardTransferF1, negativebackwardF1, positivebackwardF1 = Instructor.backwardTransfer(f1New, ncla)
+
 
             globalAccuracy = Instructor.globallMeasure(accNew, ncla)
             globalF1 = Instructor.globallMeasure(f1New, ncla)
             globalRecall = Instructor.globallMeasure(recallNew, ncla)
+            globalKappa = Instructor.globallMeasure(kappaNew, ncla)
             # forwardTransfer = Instructor.forwardTransfer(recallNew, ncla)
             forwardTransfer = Instructor.forwardTransfer(accNew, ncla)
             result = ["BWT=" + str(backwardTransfer)]
+            result = ["BWT_F1=" + str(backwardTransferF1)]
+
+            result.append(["FORGETTING_MEASURE=" + str(forgeetingMesasure)])
+            result.append(["LAST_MEASURE=" + str(lastMeasure)])
+            result.append(["DIAGONAL_MEASURE=" + str(diagonalMeasure)])
+
             result.append(["-BWT=" + str(negativebackward)])
             result.append(["+BWT=" + str(positivebackward)])
             result.append(["ACC=" + str(globalAccuracy)])
             result.append(["FWD=" + str(forwardTransfer)])
             result.append(["F1=" + str(globalF1)])
             result.append(["RECALL=" + str(globalRecall)])
+            result.append(["KAPPA=" + str(globalKappa)])
 
             np.savetxt(self.opt.multi_output, result, '%s')
 
@@ -484,19 +557,21 @@ class Instructor:
 def main():
     tstart = time.time()
 
+
     # Hyper Parameters
     #default='bert_spc'
     #default='bert_spc'
     #--model_name lcf_bert --approach ar1
     parser = argparse.ArgumentParser()
-    parser.add_argument('--model_name', default='aen_bert', type=str)
-    parser.add_argument('--dataset', default='multidomain', type=str, help='twitter, restaurant, laptop, multidomain, all_multidomain, alldevice_multidomain')
+
+    parser.add_argument('--model_name', default='bert_spc', type=str)
+    parser.add_argument('--dataset', default='multidomain', type=str, help='multidomain twitter, restaurant, laptop, multidomain, all_multidomain, alldevice_multidomain')
     parser.add_argument('--optimizer', default='adam', type=str)
     parser.add_argument('--initializer', default='xavier_uniform_', type=str)
     parser.add_argument('--learning_rate', default=2e-5, type=float, help='try 5e-5, 2e-5 for BERT, 1e-3 for others')
     parser.add_argument('--dropout', default=0.1, type=float)
     parser.add_argument('--l2reg', default=0.01, type=float)
-    parser.add_argument('--num_epoch', default=10, type=int, help='try larger number for non-BERT models')
+    parser.add_argument('--num_epoch', default=2, type=int, help='try larger number for non-BERT models')
     parser.add_argument('--batch_size', default=2, type=int, help='try 16, 32, 64 for BERT models')
     parser.add_argument('--log_step', default=5, type=int)
     parser.add_argument('--embed_dim', default=300, type=int)
@@ -522,11 +597,12 @@ def main():
 
     parser.add_argument('--experiment', default='ABSA', type=str, required=False,
                         choices=['mnist2', 'pmnist', 'cifar', 'mixture','ABSA'], help='(default=%(default)s)')
-    parser.add_argument('--approach', default='ar1', type=str, required=False,
-                        choices=['random', 'sgd', 'sgd-frozen', 'lwf', 'lfl', 'ewc', 'imm-mean', 'progressive',
+    #nostrategy
+    parser.add_argument('--approach', default='nostrategy', type=str, required=False,
+                        choices=['nostrategy', 'sgd', 'sgd-frozen', 'lwf', 'lfl', 'ewc', 'imm-mean', 'progressive',
                                  'pathnet',
                                  'imm-mode', 'sgd-restart',
-                                 'joint', 'hat', 'hat-test','si','ar1','lifelong'], help='(default=%(default)s)')
+                                 'joint', 'hat', 'hat-tests','si','ar1','lifelong'], help='(default=%(default)s)')
     parser.add_argument('--output', default='', type=str, required=False, help='(default=%(default)s)')
     parser.add_argument('--multi_output', default='', type=str, required=False, help='(default=%(default)s)')
     parser.add_argument('--nepochs', default=1, type=int, required=False, help='(default=%(default)d) try larger number for non-BERT models')
@@ -536,14 +612,17 @@ def main():
     opt = parser.parse_args()
 ##### Start Source Code Lifelong Learning ########################
     if opt.output == '':
-        opt.output = 'res/' +  opt.model_name + '_' + opt.approach  + '_' +  str(opt.batch_size) + '_' + str(opt.nepochs) + '_' + str(opt.dataset) + '_' + str(opt.measure) +'.txt'
-        opt.multi_output = 'res/multi_' + opt.model_name  + '_' + opt.approach + '_' +  str(opt.batch_size) + '_' + str(opt.nepochs) + '_' + str(opt.dataset) + '_' + str(opt.measure) + '.txt'
-        opt.recall_output = 'res/recall_' + opt.model_name  + '_' + opt.approach  + '_' +  str(opt.batch_size) + '_' + str(opt.nepochs) + '_' + str(opt.dataset) + '_' + str(opt.measure) +'.txt'
-        opt.f1_output = 'res/f1_' + opt.model_name  + '_' + opt.approach  + '_' +  str(opt.batch_size) + '_' + str(opt.nepochs) + '_' + str(opt.dataset) + '_' + str(opt.measure) +'.txt'
+        opt.output = 'res/' +  opt.model_name + '_' + opt.approach  + '_' +  str(opt.batch_size) + '_' + str(opt.nepochs) + '_' + str(opt.dataset) + '_' + str(opt.measure) + '_' + str(opt.optimizer) +'.txt'
+        opt.multi_output = 'res/multi_' + opt.model_name  + '_' + opt.approach + '_' +  str(opt.batch_size) + '_' + str(opt.nepochs) + '_' + str(opt.dataset) + '_' + str(opt.measure) + '_' + str(opt.optimizer) + '.txt'
+        opt.recall_output = 'res/recall_' + opt.model_name  + '_' + opt.approach  + '_' +  str(opt.batch_size) + '_' + str(opt.nepochs) + '_' + str(opt.dataset) + '_' + str(opt.measure) + '_' + str(opt.optimizer) +'.txt'
+        opt.f1_output = 'res/f1_' + opt.model_name  + '_' + opt.approach  + '_' +  str(opt.batch_size) + '_' + str(opt.nepochs) + '_' + str(opt.dataset) + '_' + str(opt.measure) + '_' + str(opt.optimizer) +'.txt'
 
-         #Algorithm path
+        opt.kappa_output = 'res/kappa_' + opt.model_name + '_' + opt.approach + '_' + str(opt.batch_size) + '_' + str(
+            opt.nepochs) + '_' + str(opt.dataset) + '_' + str(opt.measure) + '_' + str(opt.optimizer) + '.txt'
 
-        opt.output_algorithm = 'algorithms' + os.path.sep + 'algorithm_' +  opt.experiment + '_' + opt.approach + '_'  + opt.model_name + '.pt'
+        #Algorithm path
+
+        opt.output_algorithm = 'algorithms' + os.path.sep + 'algorithm_' +  opt.experiment + '_' + opt.approach + '_'  + opt.model_name + '_' + str(opt.dataset)+ '_' + str(opt.optimizer) +'.pt'
     print('=' * 100)
     print('Arguments =')
     for arg in vars(opt):
@@ -554,7 +633,7 @@ def main():
 
     if opt.seed is not None:
         random.seed(opt.seed)
-        numpy.random.seed(opt.seed)
+        np.random.seed(opt.seed)
         torch.manual_seed(opt.seed)
         torch.cuda.manual_seed(opt.seed)
         torch.backends.cudnn.deterministic = True
@@ -582,30 +661,60 @@ def main():
     #Delete en all_multidomain  (Computer, Mp3 player, dvd player)
     #in x_all_multidomain there are all
     #ch_all_multidomain: Chage a restaurant dataset order at last
+
+    #ch_all_multidomain = h-ee-r
+    #all_multidomain = r-ee-h
+
+    #eehr_all_multidomain
+    #eerh_all_multidomain
+    #hree_all_multidomain
+    #rhee_all_multidomain
+
+
     dataset_files = {
         'twitter': {
             'train': './datasets/acl-14-short-data/train.raw',
-            'test': './datasets/acl-14-short-data/test.raw'
+            'tests': './datasets/acl-14-short-data/tests.raw'
         },
         'restaurant': {
             'train': './datasets/semeval14/Restaurants_Train.xml.seg',
-            'test': './datasets/semeval14/Restaurants_Test_Gold.xml.seg'
+            'tests': './datasets/semeval14/Restaurants_Test_Gold.xml.seg'
         },
         'laptop': {
             'train': './datasets/semeval14/Laptops_Train.xml.seg',
-            'test': './datasets/semeval14/Laptops_Test_Gold.xml.seg'
+            'tests': './datasets/semeval14/Laptops_Test_Gold.xml.seg'
         },
         'multidomain': {
-            'train': {'twitter':'./datasets/test/train_few.raw',
-                      'laptop':'./datasets/test/Laptops_Train_few.xml.seg',
-                      'restaurant': './datasets/test/Restaurants_Train.xml.seg',},
-            'test': {'twitter':'./datasets/test/test_few.raw',
-                     'laptop':'./datasets/test/Laptops_Test_Gold_few.xml.seg',
-                     'restaurant': './datasets/test/Restaurants_Test_Gold.xml.seg'}
+            'train': {'twitter':'./datasets/tests/train_few.raw',
+                      'laptop':'./datasets/tests/Laptops_Train_few.xml.seg',
+                      'restaurant': './datasets/tests/Restaurants_Train.xml.seg',},
+            'tests': {'twitter':'./datasets/tests/test_few.raw',
+                     'laptop':'./datasets/tests/Laptops_Test_Gold_few.xml.seg',
+                     'restaurant': './datasets/tests/Restaurants_Test_Gold.xml.seg'}
+        },
+        'original_algt_test': {
+            'train': {'restaurant': './datasets/tests/Restaurants_Train.xml.seg', },
+            'tests': {'restaurant': './datasets/tests/Restaurants_Test_Gold.xml.seg'}
         },
         'original_algt': {
-            'train': {'restaurant': './datasets/test/Restaurants_Train.xml.seg', },
-            'test': {'restaurant': './datasets/test/Restaurants_Test_Gold.xml.seg'}
+            'train': {'restaurant': './datasets/semeval14/Restaurants_Train.xml.seg', },
+            'tests': {'restaurant': './datasets/semeval14/Restaurants_Test_Gold.xml.seg'}
+        },
+        'only_rest-hot': {
+            'train': {'restaurant': './datasets/semeval14/Restaurants_Train.xml.seg',
+                      'hotels': './datasets/tripadvisor/tripadvisorfiles/process/train.unique.json/train.unique.jsonTrain.raw',
+                      },
+            'tests': {'restaurant': './datasets/semeval14/Restaurants_Test_Gold.xml.seg',
+                     'hotels': './datasets/tripadvisor/tripadvisorfiles/process/tests.unique.json/tests.unique.jsonTest.raw',
+                     }
+        },
+        'only_hot-rest': {
+            'train': {'restaurant': './datasets/semeval14/Restaurants_Train.xml.seg',
+                      'hotels': './datasets/tripadvisor/tripadvisorfiles/process/train.unique.json/train.unique.jsonTrain.raw',
+                      },
+            'tests': {'restaurant': './datasets/semeval14/Restaurants_Test_Gold.xml.seg',
+                     'hotels': './datasets/tripadvisor/tripadvisorfiles/process/tests.unique.json/tests.unique.jsonTest.raw',
+                     }
         },
         'x_all_multidomain': {
             'train': {'restaurant': './datasets/semeval14/Restaurants_Train.xml.seg',
@@ -621,7 +730,7 @@ def main():
                       'hotels': './datasets/tripadvisor/tripadvisorfiles/process/train.unique.json/train.unique.jsonTrain.raw',
                       },
 
-            'test': {'restaurant': './datasets/semeval14/Restaurants_Test_Gold.xml.seg',
+            'tests': {'restaurant': './datasets/semeval14/Restaurants_Test_Gold.xml.seg',
                      'laptop': './datasets/semeval14/Laptops_Test_Gold.xml.seg',
                      'dvd player': './datasets/binliu2004/HuAndLiu2004/royal/process/apex ad2600 progressive-scan dvd player/apex ad2600 progressive-scan dvd playerTest.raw',
                      'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Test.raw',
@@ -631,7 +740,7 @@ def main():
                      'computer': './datasets/binliu2004/LiuEtAll2016/production/process/computer/computerTest.raw',
                      'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTest.raw',
                      'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTest.raw',
-                     'hotels': './datasets/tripadvisor/tripadvisorfiles/process/test.unique.json/test.unique.jsonTest.raw',
+                     'hotels': './datasets/tripadvisor/tripadvisorfiles/process/tests.unique.json/tests.unique.jsonTest.raw',
                      }
         },
         'all_multidomain': {
@@ -645,14 +754,14 @@ def main():
                       'hotels': './datasets/tripadvisor/tripadvisorfiles/process/train.unique.json/train.unique.jsonTrain.raw',
                       },
 
-            'test': {'restaurant': './datasets/semeval14/Restaurants_Test_Gold.xml.seg',
+            'tests': {'restaurant': './datasets/semeval14/Restaurants_Test_Gold.xml.seg',
                       'laptop': './datasets/semeval14/Laptops_Test_Gold.xml.seg',
                       'canon g3':'./datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Test.raw',
                       'nikon coolpix 4300':'./datasets/binliu2004/HuAndLiu2004/royal/process/nikon coolpix 4300/nikon coolpix 4300Test.raw',
                       'nokia 6610':'./datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Test.raw',
                       'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTest.raw',
                       'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTest.raw',
-                      'hotels': './datasets/tripadvisor/tripadvisorfiles/process/test.unique.json/test.unique.jsonTest.raw',
+                      'hotels': './datasets/tripadvisor/tripadvisorfiles/process/tests.unique.json/tests.unique.jsonTest.raw',
                       }
         },
         'ch_all_multidomain': {
@@ -667,8 +776,8 @@ def main():
                        'restaurant': './datasets/semeval14/Restaurants_Train.xml.seg',
                       },
 
-            'test': {
-                     'hotels': './datasets/tripadvisor/tripadvisorfiles/process/test.unique.json/test.unique.jsonTest.raw',
+            'tests': {
+                     'hotels': './datasets/tripadvisor/tripadvisorfiles/process/tests.unique.json/tests.unique.jsonTest.raw',
                      'laptop': './datasets/semeval14/Laptops_Test_Gold.xml.seg',
                      'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Test.raw',
                      'nikon coolpix 4300': './datasets/binliu2004/HuAndLiu2004/royal/process/nikon coolpix 4300/nikon coolpix 4300Test.raw',
@@ -689,7 +798,7 @@ def main():
                       'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTrain.raw',
                       'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTrain.raw',
                      },
-            'test': {
+            'tests': {
                      'dvd player': './datasets/binliu2004/HuAndLiu2004/royal/process/apex ad2600 progressive-scan dvd player/apex ad2600 progressive-scan dvd playerTest.raw',
                      'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Test.raw',
                      'creative labs nomad jukebox zen xtra 40gb': './datasets/binliu2004/HuAndLiu2004/royal/process/creative labs nomad jukebox zen xtra 40gb/creative labs nomad jukebox zen xtra 40gbTest.raw',
@@ -706,12 +815,1032 @@ def main():
                       'all_device': './datasets/binliu2004/process/globalTrain.raw',
                       'hotels': './datasets/tripadvisor/tripadvisorfiles/process/train.unique.json/train.unique.jsonTest',
                       },
-            'test': {'restaurant': './datasets/semeval14/Restaurants_Test_Gold.xml.seg',
+            'tests': {'restaurant': './datasets/semeval14/Restaurants_Test_Gold.xml.seg',
                      'laptop': './datasets/semeval14/Laptops_Test_Gold.xml.seg',
                      'all_device': './datasets/binliu2004/process/globalTest.raw',
                      'hotels': './datasets/tripadvisor/tripadvisorfiles/process/train.unique.json/train.unique.jsonTest',
                      }
         },
+        'eehr_all_multidomain': {
+            'train': {
+                'laptop': './datasets/semeval14/Laptops_Train.xml.seg',
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Train.raw',
+                'nikon coolpix 4300': './datasets/binliu2004/HuAndLiu2004/royal/process/nikon coolpix 4300/nikon coolpix 4300Train.raw',
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Train.raw',
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTrain.raw',
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTrain.raw',
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/train.unique.json/train.unique.jsonTrain.raw',
+                'restaurant': './datasets/semeval14/Restaurants_Train.xml.seg'
+            },
+
+            'tests': {
+                'laptop': './datasets/semeval14/Laptops_Test_Gold.xml.seg',
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Test.raw',
+                'nikon coolpix 4300': './datasets/binliu2004/HuAndLiu2004/royal/process/nikon coolpix 4300/nikon coolpix 4300Test.raw',
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Test.raw',
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTest.raw',
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTest.raw',
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/tests.unique.json/tests.unique.jsonTest.raw',
+                'restaurant': './datasets/semeval14/Restaurants_Test_Gold.xml.seg'
+            }
+        },
+        'eerh_all_multidomain': {
+            'train': {
+                'laptop': './datasets/semeval14/Laptops_Train.xml.seg',
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Train.raw',
+                'nikon coolpix 4300': './datasets/binliu2004/HuAndLiu2004/royal/process/nikon coolpix 4300/nikon coolpix 4300Train.raw',
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Train.raw',
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTrain.raw',
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTrain.raw',
+                'restaurant': './datasets/semeval14/Restaurants_Train.xml.seg',
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/train.unique.json/train.unique.jsonTrain.raw'
+
+            },
+
+            'tests': {
+                'laptop': './datasets/semeval14/Laptops_Test_Gold.xml.seg',
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Test.raw',
+                'nikon coolpix 4300': './datasets/binliu2004/HuAndLiu2004/royal/process/nikon coolpix 4300/nikon coolpix 4300Test.raw',
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Test.raw',
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTest.raw',
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTest.raw',
+                'restaurant': './datasets/semeval14/Restaurants_Test_Gold.xml.seg',
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/tests.unique.json/tests.unique.jsonTest.raw'
+
+            }
+        },
+        'hree_all_multidomain': {
+            'train': {
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/train.unique.json/train.unique.jsonTrain.raw',
+                'restaurant': './datasets/semeval14/Restaurants_Train.xml.seg',
+                'laptop': './datasets/semeval14/Laptops_Train.xml.seg',
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Train.raw',
+                'nikon coolpix 4300': './datasets/binliu2004/HuAndLiu2004/royal/process/nikon coolpix 4300/nikon coolpix 4300Train.raw',
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Train.raw',
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTrain.raw',
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTrain.raw'
+
+            },
+
+            'tests': {
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/tests.unique.json/tests.unique.jsonTest.raw',
+                'restaurant': './datasets/semeval14/Restaurants_Test_Gold.xml.seg',
+                'laptop': './datasets/semeval14/Laptops_Test_Gold.xml.seg',
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Test.raw',
+                'nikon coolpix 4300': './datasets/binliu2004/HuAndLiu2004/royal/process/nikon coolpix 4300/nikon coolpix 4300Test.raw',
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Test.raw',
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTest.raw',
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTest.raw'
+
+            }
+        },
+        'rhee_all_multidomain': {
+            'train': {
+                'restaurant': './datasets/semeval14/Restaurants_Train.xml.seg',
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/train.unique.json/train.unique.jsonTrain.raw',
+                'laptop': './datasets/semeval14/Laptops_Train.xml.seg',
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Train.raw',
+                'nikon coolpix 4300': './datasets/binliu2004/HuAndLiu2004/royal/process/nikon coolpix 4300/nikon coolpix 4300Train.raw',
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Train.raw',
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTrain.raw',
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTrain.raw'
+
+            },
+
+            'tests': {
+                'restaurant': './datasets/semeval14/Restaurants_Test_Gold.xml.seg',
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/tests.unique.json/tests.unique.jsonTest.raw',
+                'laptop': './datasets/semeval14/Laptops_Test_Gold.xml.seg',
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Test.raw',
+                'nikon coolpix 4300': './datasets/binliu2004/HuAndLiu2004/royal/process/nikon coolpix 4300/nikon coolpix 4300Test.raw',
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Test.raw',
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTest.raw',
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTest.raw'
+
+            }
+        },
+        'all_multidomain_wlaptop': {
+            'train': {'restaurant': './datasets/semeval14/Restaurants_Train.xml.seg',
+                      'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Train.raw',
+                      'nikon coolpix 4300': './datasets/binliu2004/HuAndLiu2004/royal/process/nikon coolpix 4300/nikon coolpix 4300Train.raw',
+                      'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Train.raw',
+                      'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTrain.raw',
+                      'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTrain.raw',
+                      'hotels': './datasets/tripadvisor/tripadvisorfiles/process/train.unique.json/train.unique.jsonTrain.raw',
+                      },
+
+            'tests': {'restaurant': './datasets/semeval14/Restaurants_Test_Gold.xml.seg',
+                     'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Test.raw',
+                     'nikon coolpix 4300': './datasets/binliu2004/HuAndLiu2004/royal/process/nikon coolpix 4300/nikon coolpix 4300Test.raw',
+                     'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Test.raw',
+                     'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTest.raw',
+                     'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTest.raw',
+                     'hotels': './datasets/tripadvisor/tripadvisorfiles/process/tests.unique.json/tests.unique.jsonTest.raw',
+                     }
+        },
+        'ch_all_multidomain_wlaptop': {
+            'train': {
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/train.unique.json/train.unique.jsonTrain.raw',
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Train.raw',
+                'nikon coolpix 4300': './datasets/binliu2004/HuAndLiu2004/royal/process/nikon coolpix 4300/nikon coolpix 4300Train.raw',
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Train.raw',
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTrain.raw',
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTrain.raw',
+                'restaurant': './datasets/semeval14/Restaurants_Train.xml.seg',
+            },
+
+            'tests': {
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/tests.unique.json/tests.unique.jsonTest.raw',
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Test.raw',
+                'nikon coolpix 4300': './datasets/binliu2004/HuAndLiu2004/royal/process/nikon coolpix 4300/nikon coolpix 4300Test.raw',
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Test.raw',
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTest.raw',
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTest.raw',
+                'restaurant': './datasets/semeval14/Restaurants_Test_Gold.xml.seg',
+            }
+        },
+        'eehr_all_multidomain_wlaptop': {
+            'train': {
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Train.raw',
+                'nikon coolpix 4300': './datasets/binliu2004/HuAndLiu2004/royal/process/nikon coolpix 4300/nikon coolpix 4300Train.raw',
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Train.raw',
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTrain.raw',
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTrain.raw',
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/train.unique.json/train.unique.jsonTrain.raw',
+                'restaurant': './datasets/semeval14/Restaurants_Train.xml.seg'
+            },
+
+            'tests': {
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Test.raw',
+                'nikon coolpix 4300': './datasets/binliu2004/HuAndLiu2004/royal/process/nikon coolpix 4300/nikon coolpix 4300Test.raw',
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Test.raw',
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTest.raw',
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTest.raw',
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/tests.unique.json/tests.unique.jsonTest.raw',
+                'restaurant': './datasets/semeval14/Restaurants_Test_Gold.xml.seg'
+            }
+        },
+        'eerh_all_multidomain_wlaptop': {
+            'train': {
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Train.raw',
+                'nikon coolpix 4300': './datasets/binliu2004/HuAndLiu2004/royal/process/nikon coolpix 4300/nikon coolpix 4300Train.raw',
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Train.raw',
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTrain.raw',
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTrain.raw',
+                'restaurant': './datasets/semeval14/Restaurants_Train.xml.seg',
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/train.unique.json/train.unique.jsonTrain.raw'
+
+            },
+
+            'tests': {
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Test.raw',
+                'nikon coolpix 4300': './datasets/binliu2004/HuAndLiu2004/royal/process/nikon coolpix 4300/nikon coolpix 4300Test.raw',
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Test.raw',
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTest.raw',
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTest.raw',
+                'restaurant': './datasets/semeval14/Restaurants_Test_Gold.xml.seg',
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/tests.unique.json/tests.unique.jsonTest.raw'
+
+            }
+        },
+        'hree_all_multidomain_wlaptop': {
+            'train': {
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/train.unique.json/train.unique.jsonTrain.raw',
+                'restaurant': './datasets/semeval14/Restaurants_Train.xml.seg',
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Train.raw',
+                'nikon coolpix 4300': './datasets/binliu2004/HuAndLiu2004/royal/process/nikon coolpix 4300/nikon coolpix 4300Train.raw',
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Train.raw',
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTrain.raw',
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTrain.raw'
+
+            },
+
+            'tests': {
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/tests.unique.json/tests.unique.jsonTest.raw',
+                'restaurant': './datasets/semeval14/Restaurants_Test_Gold.xml.seg',
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Test.raw',
+                'nikon coolpix 4300': './datasets/binliu2004/HuAndLiu2004/royal/process/nikon coolpix 4300/nikon coolpix 4300Test.raw',
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Test.raw',
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTest.raw',
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTest.raw'
+
+            }
+        },
+        'rhee_all_multidomain_wlaptop': {
+            'train': {
+                'restaurant': './datasets/semeval14/Restaurants_Train.xml.seg',
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/train.unique.json/train.unique.jsonTrain.raw',
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Train.raw',
+                'nikon coolpix 4300': './datasets/binliu2004/HuAndLiu2004/royal/process/nikon coolpix 4300/nikon coolpix 4300Train.raw',
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Train.raw',
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTrain.raw',
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTrain.raw'
+
+            },
+
+            'tests': {
+                'restaurant': './datasets/semeval14/Restaurants_Test_Gold.xml.seg',
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/tests.unique.json/tests.unique.jsonTest.raw',
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Test.raw',
+                'nikon coolpix 4300': './datasets/binliu2004/HuAndLiu2004/royal/process/nikon coolpix 4300/nikon coolpix 4300Test.raw',
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Test.raw',
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTest.raw',
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTest.raw'
+
+            }
+        },
+        'all_multidomain_llaptop': {
+            'train': {'restaurant': './datasets/semeval14/Restaurants_Train.xml.seg',
+                      'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Train.raw',
+                      'nikon coolpix 4300': './datasets/binliu2004/HuAndLiu2004/royal/process/nikon coolpix 4300/nikon coolpix 4300Train.raw',
+                      'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Train.raw',
+                      'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTrain.raw',
+                      'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTrain.raw',
+                      'laptop': './datasets/semeval14/Laptops_Train.xml.seg',
+                      'hotels': './datasets/tripadvisor/tripadvisorfiles/process/train.unique.json/train.unique.jsonTrain.raw',
+                      },
+
+            'tests': {'restaurant': './datasets/semeval14/Restaurants_Test_Gold.xml.seg',
+                     'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Test.raw',
+                     'nikon coolpix 4300': './datasets/binliu2004/HuAndLiu2004/royal/process/nikon coolpix 4300/nikon coolpix 4300Test.raw',
+                     'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Test.raw',
+                     'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTest.raw',
+                     'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTest.raw',
+                     'laptop': './datasets/semeval14/Laptops_Test_Gold.xml.seg',
+                     'hotels': './datasets/tripadvisor/tripadvisorfiles/process/tests.unique.json/tests.unique.jsonTest.raw',
+                     }
+        },
+        'ch_all_multidomain_llaptop': {
+            'train': {
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/train.unique.json/train.unique.jsonTrain.raw',
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Train.raw',
+                'nikon coolpix 4300': './datasets/binliu2004/HuAndLiu2004/royal/process/nikon coolpix 4300/nikon coolpix 4300Train.raw',
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Train.raw',
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTrain.raw',
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTrain.raw',
+                'laptop': './datasets/semeval14/Laptops_Train.xml.seg',
+                'restaurant': './datasets/semeval14/Restaurants_Train.xml.seg',
+            },
+
+            'tests': {
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/tests.unique.json/tests.unique.jsonTest.raw',
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Test.raw',
+                'nikon coolpix 4300': './datasets/binliu2004/HuAndLiu2004/royal/process/nikon coolpix 4300/nikon coolpix 4300Test.raw',
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Test.raw',
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTest.raw',
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTest.raw',
+                'laptop': './datasets/semeval14/Laptops_Test_Gold.xml.seg',
+                'restaurant': './datasets/semeval14/Restaurants_Test_Gold.xml.seg',
+            }
+        },
+        'eehr_all_multidomain_llaptop': {
+            'train': {
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Train.raw',
+                'nikon coolpix 4300': './datasets/binliu2004/HuAndLiu2004/royal/process/nikon coolpix 4300/nikon coolpix 4300Train.raw',
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Train.raw',
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTrain.raw',
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTrain.raw',
+                'laptop': './datasets/semeval14/Laptops_Train.xml.seg',
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/train.unique.json/train.unique.jsonTrain.raw',
+                'restaurant': './datasets/semeval14/Restaurants_Train.xml.seg'
+            },
+
+            'tests': {
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Test.raw',
+                'nikon coolpix 4300': './datasets/binliu2004/HuAndLiu2004/royal/process/nikon coolpix 4300/nikon coolpix 4300Test.raw',
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Test.raw',
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTest.raw',
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTest.raw',
+                'laptop': './datasets/semeval14/Laptops_Test_Gold.xml.seg',
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/tests.unique.json/tests.unique.jsonTest.raw',
+                'restaurant': './datasets/semeval14/Restaurants_Test_Gold.xml.seg'
+            }
+        },
+        'eerh_all_multidomain_llaptop': {
+            'train': {
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Train.raw',
+                'nikon coolpix 4300': './datasets/binliu2004/HuAndLiu2004/royal/process/nikon coolpix 4300/nikon coolpix 4300Train.raw',
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Train.raw',
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTrain.raw',
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTrain.raw',
+                'laptop': './datasets/semeval14/Laptops_Train.xml.seg',
+                'restaurant': './datasets/semeval14/Restaurants_Train.xml.seg',
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/train.unique.json/train.unique.jsonTrain.raw'
+
+            },
+
+            'tests': {
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Test.raw',
+                'nikon coolpix 4300': './datasets/binliu2004/HuAndLiu2004/royal/process/nikon coolpix 4300/nikon coolpix 4300Test.raw',
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Test.raw',
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTest.raw',
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTest.raw',
+                'laptop': './datasets/semeval14/Laptops_Test_Gold.xml.seg',
+                'restaurant': './datasets/semeval14/Restaurants_Test_Gold.xml.seg',
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/tests.unique.json/tests.unique.jsonTest.raw'
+
+            }
+        },
+        'hree_all_multidomain_llaptop': {
+            'train': {
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/train.unique.json/train.unique.jsonTrain.raw',
+                'restaurant': './datasets/semeval14/Restaurants_Train.xml.seg',
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Train.raw',
+                'nikon coolpix 4300': './datasets/binliu2004/HuAndLiu2004/royal/process/nikon coolpix 4300/nikon coolpix 4300Train.raw',
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Train.raw',
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTrain.raw',
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTrain.raw',
+                'laptop': './datasets/semeval14/Laptops_Train.xml.seg',
+
+            },
+
+            'tests': {
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/tests.unique.json/tests.unique.jsonTest.raw',
+                'restaurant': './datasets/semeval14/Restaurants_Test_Gold.xml.seg',
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Test.raw',
+                'nikon coolpix 4300': './datasets/binliu2004/HuAndLiu2004/royal/process/nikon coolpix 4300/nikon coolpix 4300Test.raw',
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Test.raw',
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTest.raw',
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTest.raw',
+                'laptop': './datasets/semeval14/Laptops_Test_Gold.xml.seg'
+
+            }
+        },
+        'rhee_all_multidomain_llaptop': {
+            'train': {
+                'restaurant': './datasets/semeval14/Restaurants_Train.xml.seg',
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/train.unique.json/train.unique.jsonTrain.raw',
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Train.raw',
+                'nikon coolpix 4300': './datasets/binliu2004/HuAndLiu2004/royal/process/nikon coolpix 4300/nikon coolpix 4300Train.raw',
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Train.raw',
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTrain.raw',
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTrain.raw',
+                'laptop': './datasets/semeval14/Laptops_Train.xml.seg'
+
+            },
+
+            'tests': {
+                'restaurant': './datasets/semeval14/Restaurants_Test_Gold.xml.seg',
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/tests.unique.json/tests.unique.jsonTest.raw',
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Test.raw',
+                'nikon coolpix 4300': './datasets/binliu2004/HuAndLiu2004/royal/process/nikon coolpix 4300/nikon coolpix 4300Test.raw',
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Test.raw',
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTest.raw',
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTest.raw',
+                'laptop': './datasets/semeval14/Laptops_Test_Gold.xml.seg',
+
+            }
+        },
+
+        'prmttnIn3_collection_0': {
+
+            'train': {
+                'restaurant': './datasets/semeval14/Restaurants_Train.xml.seg',
+
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Train.raw',
+
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTrain.raw',
+            },
+
+            'tests': {
+                'restaurant': './datasets/semeval14/Restaurants_Test_Gold.xml.seg',
+
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Test.raw',
+
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTest.raw',
+            }
+        },
+        'prmttnIn3_collection_1': {
+
+            'train': {
+                'restaurant': './datasets/semeval14/Restaurants_Train.xml.seg',
+
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Train.raw',
+
+                'laptop': './datasets/semeval14/Laptops_Train.xml.seg',
+            },
+
+            'tests': {
+                'restaurant': './datasets/semeval14/Restaurants_Test_Gold.xml.seg',
+
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Test.raw',
+
+                'laptop': './datasets/semeval14/Laptops_Test_Gold.xml.seg',
+            }
+        },
+        'prmttnIn3_collection_2': {
+
+            'train': {
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTrain.raw',
+
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTrain.raw',
+
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Train.raw',
+            },
+
+            'tests': {
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTest.raw',
+
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTest.raw',
+
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Test.raw',
+            }
+        },
+        'prmttnIn3_collection_3': {
+
+            'train': {
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTrain.raw',
+
+                'laptop': './datasets/semeval14/Laptops_Train.xml.seg',
+
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Train.raw',
+            },
+
+            'tests': {
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTest.raw',
+
+                'laptop': './datasets/semeval14/Laptops_Test_Gold.xml.seg',
+
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Test.raw',
+            }
+        },
+        'prmttnIn3_collection_4': {
+
+            'train': {
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTrain.raw',
+
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Train.raw',
+
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTrain.raw',
+            },
+
+            'tests': {
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTest.raw',
+
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Test.raw',
+
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTest.raw',
+            }
+        },
+        'prmttnIn3_collection_5': {
+
+            'train': {
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTrain.raw',
+
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Train.raw',
+
+                'laptop': './datasets/semeval14/Laptops_Train.xml.seg',
+            },
+
+            'tests': {
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTest.raw',
+
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Test.raw',
+
+                'laptop': './datasets/semeval14/Laptops_Test_Gold.xml.seg',
+            }
+        },
+        'prmttnIn3_collection_6': {
+
+            'train': {
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTrain.raw',
+
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/train.unique.json/train.unique.jsonTrain.raw',
+
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Train.raw',
+            },
+
+            'tests': {
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTest.raw',
+
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/tests.unique.json/tests.unique.jsonTest.raw',
+
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Test.raw',
+            }
+        },
+        'prmttnIn3_collection_7': {
+
+            'train': {
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTrain.raw',
+
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Train.raw',
+
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Train.raw',
+            },
+
+            'tests': {
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTest.raw',
+
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Test.raw',
+
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Test.raw',
+            }
+        },
+        'prmttnIn3_collection_8': {
+
+            'train': {
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTrain.raw',
+
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTrain.raw',
+
+                'laptop': './datasets/semeval14/Laptops_Train.xml.seg',
+            },
+
+            'tests': {
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTest.raw',
+
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTest.raw',
+
+                'laptop': './datasets/semeval14/Laptops_Test_Gold.xml.seg',
+            }
+        },
+        'prmttnIn3_collection_9': {
+
+            'train': {
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTrain.raw',
+
+                'laptop': './datasets/semeval14/Laptops_Train.xml.seg',
+
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Train.raw',
+            },
+
+            'tests': {
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTest.raw',
+
+                'laptop': './datasets/semeval14/Laptops_Test_Gold.xml.seg',
+
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Test.raw',
+            }
+        },
+        'prmttnIn3_collection_10': {
+
+            'train': {
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTrain.raw',
+
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/train.unique.json/train.unique.jsonTrain.raw',
+
+                'laptop': './datasets/semeval14/Laptops_Train.xml.seg',
+            },
+
+            'tests': {
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTest.raw',
+
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/tests.unique.json/tests.unique.jsonTest.raw',
+
+                'laptop': './datasets/semeval14/Laptops_Test_Gold.xml.seg',
+            }
+        },
+        'prmttnIn3_collection_11': {
+
+            'train': {
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTrain.raw',
+
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/train.unique.json/train.unique.jsonTrain.raw',
+
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTrain.raw',
+            },
+
+            'tests': {
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTest.raw',
+
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/tests.unique.json/tests.unique.jsonTest.raw',
+
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTest.raw',
+            }
+        },
+        'prmttnIn3_collection_12': {
+
+            'train': {
+                'restaurant': './datasets/semeval14/Restaurants_Train.xml.seg',
+
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Train.raw',
+
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Train.raw',
+            },
+
+            'tests': {
+                'restaurant': './datasets/semeval14/Restaurants_Test_Gold.xml.seg',
+
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Test.raw',
+
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Test.raw',
+            }
+        },
+        'prmttnIn3_collection_13': {
+
+            'train': {
+                'restaurant': './datasets/semeval14/Restaurants_Train.xml.seg',
+
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTrain.raw',
+
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Train.raw',
+            },
+
+            'tests': {
+                'restaurant': './datasets/semeval14/Restaurants_Test_Gold.xml.seg',
+
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTest.raw',
+
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Test.raw',
+            }
+        },
+        'prmttnIn3_collection_14': {
+
+            'train': {
+                'restaurant': './datasets/semeval14/Restaurants_Train.xml.seg',
+
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTrain.raw',
+
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Train.raw',
+            },
+
+            'tests': {
+                'restaurant': './datasets/semeval14/Restaurants_Test_Gold.xml.seg',
+
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTest.raw',
+
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Test.raw',
+            }
+        },
+        'prmttnIn3_collection_14': {
+
+            'train': {
+                'restaurant': './datasets/semeval14/Restaurants_Train.xml.seg',
+
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTrain.raw',
+
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Train.raw',
+            },
+
+            'tests': {
+                'restaurant': './datasets/semeval14/Restaurants_Test_Gold.xml.seg',
+
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTest.raw',
+
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Test.raw',
+            }
+        },
+        'prmttnIn3_collection_15': {
+
+            'train': {
+                'restaurant': './datasets/semeval14/Restaurants_Train.xml.seg',
+
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/train.unique.json/train.unique.jsonTrain.raw',
+
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTrain.raw',
+            },
+
+            'tests': {
+                'restaurant': './datasets/semeval14/Restaurants_Test_Gold.xml.seg',
+
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/tests.unique.json/tests.unique.jsonTest.raw',
+
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTest.raw',
+            }
+        },
+        'prmttnIn3_collection_16': {
+
+            'train': {
+                'restaurant': './datasets/semeval14/Restaurants_Train.xml.seg',
+
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/train.unique.json/train.unique.jsonTrain.raw',
+
+                'laptop': './datasets/semeval14/Laptops_Train.xml.seg',
+            },
+
+            'tests': {
+                'restaurant': './datasets/semeval14/Restaurants_Test_Gold.xml.seg',
+
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/tests.unique.json/tests.unique.jsonTest.raw',
+
+                'laptop': './datasets/semeval14/Laptops_Test_Gold.xml.seg',
+            }
+        },
+        'prmttnIn3_collection_17': {
+
+            'train': {
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/train.unique.json/train.unique.jsonTrain.raw',
+
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Train.raw',
+
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Train.raw',
+            },
+
+            'tests': {
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/tests.unique.json/tests.unique.jsonTest.raw',
+
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Test.raw',
+
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Test.raw',
+            }
+        },
+        'prmttnIn3_collection_18': {
+
+            'train': {
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/train.unique.json/train.unique.jsonTrain.raw',
+
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTrain.raw',
+
+                'laptop': './datasets/semeval14/Laptops_Train.xml.seg',
+            },
+
+            'tests': {
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/tests.unique.json/tests.unique.jsonTest.raw',
+
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTest.raw',
+
+                'laptop': './datasets/semeval14/Laptops_Test_Gold.xml.seg',
+            }
+        },
+        'prmttnIn3_collection_19': {
+
+            'train': {
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Train.raw',
+
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTrain.raw',
+
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Train.raw',
+            },
+
+            'tests': {
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Test.raw',
+
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTest.raw',
+
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Test.raw',
+            }
+        },
+        'prmttnIn3_collection_20': {
+
+            'train': {
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Train.raw',
+
+                'laptop': './datasets/semeval14/Laptops_Train.xml.seg',
+
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Train.raw',
+            },
+
+            'tests': {
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Test.raw',
+
+                'laptop': './datasets/semeval14/Laptops_Test_Gold.xml.seg',
+
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Test.raw',
+            }
+        },
+        'prmttnIn3_collection_21': {
+
+            'train': {
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Train.raw',
+
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTrain.raw',
+
+                'laptop': './datasets/semeval14/Laptops_Train.xml.seg',
+            },
+
+            'tests': {
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Test.raw',
+
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTest.raw',
+
+                'laptop': './datasets/semeval14/Laptops_Test_Gold.xml.seg',
+            }
+        },
+        'prmttnIn3_collection_22': {
+
+            'train': {
+                'restaurant': './datasets/semeval14/Restaurants_Train.xml.seg',
+
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTrain.raw',
+
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/train.unique.json/train.unique.jsonTrain.raw',
+            },
+
+            'tests': {
+                'restaurant': './datasets/semeval14/Restaurants_Test_Gold.xml.seg',
+
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTest.raw',
+
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/tests.unique.json/tests.unique.jsonTest.raw',
+            }
+        },
+        'prmttnIn3_collection_23': {
+
+            'train': {
+                'restaurant': './datasets/semeval14/Restaurants_Train.xml.seg',
+
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTrain.raw',
+
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Train.raw',
+            },
+
+            'tests': {
+                'restaurant': './datasets/semeval14/Restaurants_Test_Gold.xml.seg',
+
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTest.raw',
+
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Test.raw',
+            }
+        },
+        'prmttnIn3_collection_24': {
+
+            'train': {
+                'restaurant': './datasets/semeval14/Restaurants_Train.xml.seg',
+
+                'laptop': './datasets/semeval14/Laptops_Train.xml.seg',
+
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Train.raw',
+            },
+
+            'tests': {
+                'restaurant': './datasets/semeval14/Restaurants_Test_Gold.xml.seg',
+
+                'laptop': './datasets/semeval14/Laptops_Test_Gold.xml.seg',
+
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Test.raw',
+            }
+        },
+        'prmttnIn3_collection_25': {
+
+            'train': {
+                'restaurant': './datasets/semeval14/Restaurants_Train.xml.seg',
+
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTrain.raw',
+
+                'laptop': './datasets/semeval14/Laptops_Train.xml.seg',
+            },
+
+            'tests': {
+                'restaurant': './datasets/semeval14/Restaurants_Test_Gold.xml.seg',
+
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTest.raw',
+
+                'laptop': './datasets/semeval14/Laptops_Test_Gold.xml.seg',
+            }
+        },
+        'prmttnIn3_collection_26': {
+
+            'train': {
+                'restaurant': './datasets/semeval14/Restaurants_Train.xml.seg',
+
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/train.unique.json/train.unique.jsonTrain.raw',
+
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Train.raw',
+            },
+
+            'tests': {
+                'restaurant': './datasets/semeval14/Restaurants_Test_Gold.xml.seg',
+
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/tests.unique.json/tests.unique.jsonTest.raw',
+
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Test.raw',
+            }
+        },
+        'prmttnIn3_collection_27': {
+
+            'train': {
+                'restaurant': './datasets/semeval14/Restaurants_Train.xml.seg',
+
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTrain.raw',
+
+                'laptop': './datasets/semeval14/Laptops_Train.xml.seg',
+            },
+
+            'tests': {
+                'restaurant': './datasets/semeval14/Restaurants_Test_Gold.xml.seg',
+
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTest.raw',
+
+                'laptop': './datasets/semeval14/Laptops_Test_Gold.xml.seg',
+            }
+        },
+        'prmttnIn3_collection_28': {
+
+            'train': {
+                'restaurant': './datasets/semeval14/Restaurants_Train.xml.seg',
+
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTrain.raw',
+
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTrain.raw',
+            },
+
+            'tests': {
+                'restaurant': './datasets/semeval14/Restaurants_Test_Gold.xml.seg',
+
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTest.raw',
+
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTest.raw',
+            }
+        },
+        'prmttnIn3_collection_29': {
+
+            'train': {
+                'restaurant': './datasets/semeval14/Restaurants_Train.xml.seg',
+
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/train.unique.json/train.unique.jsonTrain.raw',
+
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Train.raw',
+            },
+
+            'tests': {
+                'restaurant': './datasets/semeval14/Restaurants_Test_Gold.xml.seg',
+
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/tests.unique.json/tests.unique.jsonTest.raw',
+
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Test.raw',
+            }
+        },
+        'prmttnIn3_collection_30': {
+
+            'train': {
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/train.unique.json/train.unique.jsonTrain.raw',
+
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTrain.raw',
+
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Train.raw',
+            },
+
+            'tests': {
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/tests.unique.json/tests.unique.jsonTest.raw',
+
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTest.raw',
+
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Test.raw',
+            }
+        },
+        'prmttnIn3_collection_31': {
+
+            'train': {
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/train.unique.json/train.unique.jsonTrain.raw',
+
+                'laptop': './datasets/semeval14/Laptops_Train.xml.seg',
+
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Train.raw',
+            },
+
+            'tests': {
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/tests.unique.json/tests.unique.jsonTest.raw',
+
+                'laptop': './datasets/semeval14/Laptops_Test_Gold.xml.seg',
+
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Test.raw',
+            }
+        },
+        'prmttnIn3_collection_32': {
+
+            'train': {
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/train.unique.json/train.unique.jsonTrain.raw',
+
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Train.raw',
+
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTrain.raw',
+            },
+
+            'tests': {
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/tests.unique.json/tests.unique.jsonTest.raw',
+
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Test.raw',
+
+                'speaker': './datasets/binliu2004/LiuEtAll2016/production/process/speaker/speakerTest.raw',
+            }
+        },
+        'prmttnIn3_collection_33': {
+
+            'train': {
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/train.unique.json/train.unique.jsonTrain.raw',
+
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Train.raw',
+
+                'laptop': './datasets/semeval14/Laptops_Train.xml.seg',
+            },
+
+            'tests': {
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/tests.unique.json/tests.unique.jsonTest.raw',
+
+                'canon g3': './datasets/binliu2004/HuAndLiu2004/royal/process/canon g3/canon g3Test.raw',
+
+                'laptop': './datasets/semeval14/Laptops_Test_Gold.xml.seg',
+            }
+        },
+        'prmttnIn3_collection_34': {
+
+            'train': {
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTrain.raw',
+
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/train.unique.json/train.unique.jsonTrain.raw',
+
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Train.raw',
+            },
+
+            'tests': {
+                'router': './datasets/binliu2004/LiuEtAll2016/production/process/router/routerTest.raw',
+
+                'hotels': './datasets/tripadvisor/tripadvisorfiles/process/tests.unique.json/tests.unique.jsonTest.raw',
+
+                'nokia 6610': './datasets/binliu2004/HuAndLiu2004/royal/process/nokia 6610/nokia 6610Test.raw',
+            }
+        },
+
     }
 
 
@@ -747,15 +1876,33 @@ def main():
         'asgd': torch.optim.ASGD,  # default lr=0.01
         'rmsprop': torch.optim.RMSprop,  # default lr=0.01
         'sgd': torch.optim.SGD,
+        'adamw':torch.optim.AdamW,     # default lr=0.001
+
+        'nadam': nnt.NAdam  # class neuralnet_pytorch.optim.NAdam(params, lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0, decay=<function NAdam.<lambda>>)
+
     }
+
+    #'nadam': nnt.NAdam  # class neuralnet_pytorch.optim.NAdam(params, lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0, decay=<function NAdam.<lambda>>)
+
     opt.model_class = model_classes[opt.model_name]
     print ("Objeto " + str(opt.model_class))
     #opt.model_class = opt.model_name
     opt.dataset_file = dataset_files[opt.dataset]
 
     #Define multidomain task size
-    if opt.dataset == 'multidomain' or opt.dataset == 'all_multidomain' or opt.dataset == 'alldevice_multidomain' or opt.dataset == 'ch_all_multidomain' \
-            or opt.dataset == 'original_algt':
+    possible_dataset = [ 'all_multidomain', 'ch_all_multidomain', 'eehr_all_multidomain', 'eerh_all_multidomain', 'hree_all_multidomain', 'rhee_all_multidomain', \
+                         'all_multidomain_wlaptop', 'ch_all_multidomain_wlaptop', 'eehr_all_multidomain_wlaptop', 'eerh_all_multidomain_wlaptop', 'hree_all_multidomain_wlaptop',  'rhee_all_multidomain_wlaptop', \
+                                  'all_multidomain_llaptop', 'ch_all_multidomain_llaptop', 'eehr_all_multidomain_llaptop', 'eerh_all_multidomain_llaptop', 'hree_all_multidomain_llaptop',  'rhee_all_multidomain_llaptop' \
+                                                                                                                                                                                            'prmttnIn3_collection_0',
+                         'prmttnIn3_collection_1', 'prmttnIn3_collection_2', 'prmttnIn3_collection_3','prmttnIn3_collection_4', 'prmttnIn3_collection_5', 'prmttnIn3_collection_6','prmttnIn3_collection_7', 'prmttnIn3_collection_8', 'prmttnIn3_collection_9',\
+                         'prmttnIn3_collection_10', 'prmttnIn3_collection_11', 'prmttnIn3_collection_12', 'prmttnIn3_collection_13', 'prmttnIn3_collection_14', 'prmttnIn3_collection_15', 'prmttnIn3_collection_16', 'prmttnIn3_collection_17', 'prmttnIn3_collection_18', \
+                         'prmttnIn3_collection_19', 'prmttnIn3_collection_20', 'prmttnIn3_collection_21', 'prmttnIn3_collection_22', 'prmttnIn3_collection_23', 'prmttnIn3_collection_24', 'prmttnIn3_collection_25', 'prmttnIn3_collection_26', 'prmttnIn3_collection_27', \
+                         'prmttnIn3_collection_28', 'prmttnIn3_collection_29', 'prmttnIn3_collection_30', 'prmttnIn3_collection_31', 'prmttnIn3_collection_32', 'prmttnIn3_collection_33', 'prmttnIn3_collection_34' ]
+
+    if opt.dataset in possible_dataset or opt.dataset == 'multidomain' or opt.dataset == 'all_multidomain' or opt.dataset == 'alldevice_multidomain' or opt.dataset == 'ch_all_multidomain' \
+            or opt.dataset == 'original_algt' or opt.dataset == 'restaurant' or opt.dataset == 'device_multidomain' or opt.dataset == 'only_hot-rest' or opt.dataset == 'only_rest-hot' \
+            or opt.dataset == 'eehr_all_multidomain' or opt.dataset == 'eerh_all_multidomain' or opt.dataset == 'hree_all_multidomain' or opt.dataset == 'rhee_all_multidomain' :
+
         opt.taskcla = len(dataset_files[opt.dataset]['train'])
 
     opt.inputs_cols = input_colses[opt.model_name]
@@ -770,6 +1917,17 @@ def main():
     ins = Instructor(opt,model_classes)
     ins.run()
 
+    #########
+    ###  Compute Sentence Similary with BERT
+    #### https://www.kaggle.com/eriknovak/pytorch-bert-sentence-similarity
+
 
 if __name__ == '__main__':
     main()
+
+
+#### All permutation in arrat
+#import itertools
+#import numpy
+#list(itertools.permutations([1,2,3]))
+#numpy.array(list(itertools.permutations([1,2,3])))

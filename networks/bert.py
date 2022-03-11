@@ -20,7 +20,7 @@ class Net(torch.nn.Module):
         #Create a Linear output layer for each domain or task
         #in regularization concept only fix wheigts in output layer for each domain
 
-        # self.last = torch.nn.ModuleList()
+        self.last = torch.nn.ModuleList()
         # for t, n,_ in self.taskcla:
         #     self.last.append(torch.nn.Linear(opt.polarities_dim, opt.polarities_dim))
 
@@ -97,6 +97,9 @@ class Net(torch.nn.Module):
         #  Used only in hat approach
         #  each base algortihm  knowes how compute get_view_for
         ###
+
+    def get_Model(self):
+        return self.model
 
     def set_ModelOptimizer(self, optimizer):
         if self.model != None:

@@ -8,7 +8,9 @@ import pickle
 import numpy as np
 import torch
 from torch.utils.data import Dataset
-from pytorch_pretrained_bert import BertTokenizer
+
+from pytorch_transformers import *
+#from pytorch_pretrained_bert import BertTokenizer
 
 
 def build_tokenizer(fnames, max_seq_len, dat_fname):
@@ -147,6 +149,11 @@ class ABSADataset(Dataset):
                         aspect = lines[i + 1].lower().strip()
                         polarity = lines[i + 2].strip()
 
+                        text_raw_sentence = text_left + " " + aspect + " " + text_right
+                        text_raw_aspect = aspect
+                        text_raw_left_sentence = text_left
+                        text_raw_rigth_sentence = text_right
+
                         text_raw_indices = tokenizer.text_to_sequence(text_left + " " + aspect + " " + text_right)
                         text_raw_without_aspect_indices = tokenizer.text_to_sequence(text_left + " " + text_right)
                         text_left_indices = tokenizer.text_to_sequence(text_left)
@@ -179,7 +186,12 @@ class ABSADataset(Dataset):
                             "[CLS] " + text_left + " " + aspect + " " + text_right + " [SEP]")
                         aspect_bert_indices = tokenizer.text_to_sequence("[CLS] " + aspect + " [SEP]")
                         if np.sum(text_raw_without_aspect_indices) > 0:
+
                             data = {
+                                'text_raw_sentence':text_raw_sentence,
+                                'text_raw_aspect':text_raw_aspect,
+                                'text_raw_left_sentence':text_raw_left_sentence,
+                                'text_raw_rigth_sentence': text_raw_rigth_sentence,
                                 'text_bert_indices': text_bert_indices,
                                 'bert_segments_ids': bert_segments_ids,
                                 'text_raw_bert_indices': text_raw_bert_indices,
@@ -197,6 +209,53 @@ class ABSADataset(Dataset):
 
                             all_data.append(data)
                 self.data.append((domain, len(all_data), all_data,aspects, word_in_domain ))
+                print("Domain: ", domain, " size: ",  len(all_data))
+        elif type(fname) is tuple:
+            sentence_text, aspect  = fname
+            all_data = []
+            text_left, _, text_right = [s.lower().strip() for s in sentence_text.partition("$T$")]
+            polarity = "0"
+
+            text_raw_indices = tokenizer.text_to_sequence(text_left + " " + aspect + " " + text_right)
+            text_raw_without_aspect_indices = tokenizer.text_to_sequence(text_left + " " + text_right)
+            text_left_indices = tokenizer.text_to_sequence(text_left)
+            text_left_with_aspect_indices = tokenizer.text_to_sequence(text_left + " " + aspect)
+            text_right_indices = tokenizer.text_to_sequence(text_right, reverse=True)
+            text_right_with_aspect_indices = tokenizer.text_to_sequence(" " + aspect + " " + text_right, reverse=True)
+
+            aspect_indices = tokenizer.text_to_sequence(aspect)
+            left_context_len = np.sum(text_left_indices != 0)
+            aspect_len = np.sum(aspect_indices != 0)
+            aspect_in_text = torch.tensor([left_context_len.item(), (left_context_len + aspect_len - 1).item()])
+            polarity = int(polarity) + 1
+
+            text_bert_indices = tokenizer.text_to_sequence(
+                '[CLS] ' + text_left + " " + aspect + " " + text_right + ' [SEP] ' + aspect + " [SEP]")
+            bert_segments_ids = np.asarray([0] * (np.sum(text_raw_indices != 0) + 2) + [1] * (aspect_len + 1))
+            bert_segments_ids = pad_and_truncate(bert_segments_ids, tokenizer.max_seq_len)
+
+            text_raw_bert_indices = tokenizer.text_to_sequence(
+                "[CLS] " + text_left + " " + aspect + " " + text_right + " [SEP]")
+            aspect_bert_indices = tokenizer.text_to_sequence("[CLS] " + aspect + " [SEP]")
+
+            data = {
+                'text_bert_indices': text_bert_indices,
+                'bert_segments_ids': bert_segments_ids,
+                'text_raw_bert_indices': text_raw_bert_indices,
+                'aspect_bert_indices': aspect_bert_indices,
+                'text_raw_indices': text_raw_indices,
+                'text_raw_without_aspect_indices': text_raw_without_aspect_indices,
+                'text_left_indices': text_left_indices,
+                'text_left_with_aspect_indices': text_left_with_aspect_indices,
+                'text_right_indices': text_right_indices,
+                'text_right_with_aspect_indices': text_right_with_aspect_indices,
+                'aspect_indices': aspect_indices,
+                'aspect_in_text': aspect_in_text,
+                'polarity': polarity,
+            }
+
+            all_data.append(data)
+            self.data = all_data
         else:
             fin = open(fname, 'r', encoding='utf-8', newline='\n', errors='ignore')
             lines = fin.readlines()
@@ -214,6 +273,8 @@ class ABSADataset(Dataset):
                 text_left_with_aspect_indices = tokenizer.text_to_sequence(text_left + " " + aspect)
                 text_right_indices = tokenizer.text_to_sequence(text_right, reverse=True)
                 text_right_with_aspect_indices = tokenizer.text_to_sequence(" " + aspect + " " + text_right, reverse=True)
+
+
                 aspect_indices = tokenizer.text_to_sequence(aspect)
                 left_context_len = np.sum(text_left_indices != 0)
                 aspect_len = np.sum(aspect_indices != 0)
@@ -251,3 +312,92 @@ class ABSADataset(Dataset):
 
     def __len__(self):
         return len(self.data)
+
+
+
+class ABSADatasetText(Dataset):
+    def __init__(self, textDict, tokenizer, type = True):
+
+        #if fname is a list != empty
+        #continual learning dataset
+        #
+        if isinstance(textDict, list) and type == True:
+            for iSentence in textDict:
+                sentence = iSentence['sentence']
+                aspect = iSentence['aspect']
+                polarity = iSentence['polarity']
+                self.multidomain = True
+                self.data = []
+                self.all_aspects = set()
+                # for domain, address in fname.items():
+                all_data = []
+                aspects = set()
+                word_in_domain = set()
+                # for i in range(0, len(lines), 3):
+                text_left, _, text_right = [s.lower().strip() for s in sentence.partition("$T$")]
+                if len(text_left) + len(text_right) > 0:
+                    #aspect = lines[i + 1].lower().strip()
+                    #polarity = lines[i + 2].strip()
+
+                    text_raw_indices = tokenizer.text_to_sequence(text_left + " " + aspect + " " + text_right)
+                    text_raw_without_aspect_indices = tokenizer.text_to_sequence(text_left + " " + text_right)
+                    text_left_indices = tokenizer.text_to_sequence(text_left)
+                    text_left_with_aspect_indices = tokenizer.text_to_sequence(text_left + " " + aspect)
+                    text_right_indices = tokenizer.text_to_sequence(text_right, reverse=True)
+                    text_right_with_aspect_indices = tokenizer.text_to_sequence(" " + aspect + " " + text_right,
+                                                                                reverse=True)
+
+                    aspect_indices = tokenizer.text_to_sequence(aspect)
+
+                    ##Obtain aspects indices in domain
+                    self.all_aspects = self.all_aspects.union([index for index in aspect_indices if index != 0])
+                    aspects = aspects.union([index for index in aspect_indices if index != 0])
+
+                    ##Obtain words indices in domain
+                    word_in_domain = word_in_domain.union([index for index in text_left_indices if index != 0])
+                    word_in_domain = word_in_domain.union([index for index in text_right_indices if index != 0])
+
+                    left_context_len = np.sum(text_left_indices != 0)
+                    aspect_len = np.sum(aspect_indices != 0)
+                    aspect_in_text = torch.tensor(
+                        [left_context_len.item(), (left_context_len + aspect_len - 1).item()])
+                    polarity = int(polarity) + 1
+
+                    text_bert_indices = tokenizer.text_to_sequence(
+                        '[CLS] ' + text_left + " " + aspect + " " + text_right + ' [SEP] ' + aspect + " [SEP]")
+                    bert_segments_ids = np.asarray(
+                        [0] * (np.sum(text_raw_indices != 0) + 2) + [1] * (aspect_len + 1))
+                    bert_segments_ids = pad_and_truncate(bert_segments_ids, tokenizer.max_seq_len)
+
+                    text_raw_bert_indices = tokenizer.text_to_sequence(
+                        "[CLS] " + text_left + " " + aspect + " " + text_right + " [SEP]")
+                    aspect_bert_indices = tokenizer.text_to_sequence("[CLS] " + aspect + " [SEP]")
+                    if np.sum(text_raw_without_aspect_indices) > 0:
+                        data = {
+                            'text_bert_indices': text_bert_indices,
+                            'bert_segments_ids': bert_segments_ids,
+                            'text_raw_bert_indices': text_raw_bert_indices,
+                            'aspect_bert_indices': aspect_bert_indices,
+                            'text_raw_indices': text_raw_indices,
+                            'text_raw_without_aspect_indices': text_raw_without_aspect_indices,
+                            'text_left_indices': text_left_indices,
+                            'text_left_with_aspect_indices': text_left_with_aspect_indices,
+                            'text_right_indices': text_right_indices,
+                            'text_right_with_aspect_indices': text_right_with_aspect_indices,
+                            'aspect_indices': aspect_indices,
+                            'aspect_in_text': aspect_in_text,
+                            'polarity': polarity,
+                        }
+
+                        all_data.append(data)
+            self.data = all_data
+
+
+
+
+    def __getitem__(self, index):
+        return self.data[index]
+
+    def __len__(self):
+        return len(self.data)
+

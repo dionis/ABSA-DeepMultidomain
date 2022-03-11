@@ -87,6 +87,10 @@ class Net(torch.nn.Module):
         #  each base algortihm  knowes how compute get_view_for
         ###
 
+    def get_Model(self):
+        return self.model
+
+
     def getWordInDomain(self):
         if self.model == None:
             return None

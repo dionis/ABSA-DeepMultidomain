@@ -5,6 +5,7 @@ import psutil
 import torch
 from sklearn import metrics
 from copy import deepcopy
+import re
 
 from setuptools.command.test import test
 
@@ -32,6 +33,9 @@ class Appr(object):
         optimizer = self.model.get_Optimizer()
         if optimizer != None:
             self._set_optimizer(optimizer)
+
+        if self.model != None:
+            self.task_size = 1 if self.model.taskcla == None else len(self.model.taskcla)
 
         # self.optimizer=self._get_optimizer()
         self.lamb=lamb                      # Grid search = [500,1000,2000,5000,10000,20000,50000]; best was 5000
@@ -62,20 +66,14 @@ class Appr(object):
         if lr is None: lr=self.lr
 
         print("!!!!New optmization!!!!!")
-        if self.optimizer != None:
-            print("--------Optmization---------")
-            return self.optimizer
+        # if self.optimizer != None:
+        #     print("--------Optmization---------")
+        #     return self.optimizer
 
-        modelVariables = [(name, var) for i, (name, var) in enumerate(self.model.named_parameters())]
+        #return torch.optim.SGD(self.tensorVariables, lr=lr)
+        #return torch.optim.SGD(self.model.parameters(),lr=lr)
+        return self.opt.optimizer(self.model.parameters(), lr=self.opt.learning_rate, weight_decay=self.opt.l2reg)
 
-        # modelVariables = [(name, var) for i, (name, var) in enumerate(self.model.named_parameters()) if
-        #                   name.find("bert") == -1]
-        tensorVariables = []
-        for name, var in modelVariables:
-            #print("Variable ==> " + name)
-            tensorVariables.append(var)
-
-        return torch.optim.SGD(tensorVariables,lr=lr)
 
     def train(self, t, train_data_loader, test_data_loader, val_data_loader):
         best_loss=np.inf
@@ -88,6 +86,16 @@ class Appr(object):
                                        volatile=False) if torch.cuda.is_available() else torch.autograd.Variable(
             torch.LongTensor([t]), volatile=False)
         # Loop epochs
+
+        print(" ###### Update status of last layer weight in current task(domain) AVOID Stocastic Gradient ########")
+
+        for name, var in self.model.named_parameters():
+          if name.find("model.last.") != -1:
+                var.requires_grad_(False);
+                if re.match("model.last." + str(t), name) != None:
+                    print("Variable " + name + " update to SGD")
+                    var.requires_grad_(True);
+
         for e in range(self.nepochs):
             # Train
             clock0 = time.time()
@@ -96,22 +104,27 @@ class Appr(object):
 
             clock1 = time.time()
 
-            train_loss, train_acc,train_recall, train_f1 = self.eval_withregx(t, test_data_loader)
+            train_loss, train_acc,train_recall, train_f1,train_cohen_kappa = self.eval_withregx(t,val_data_loader )
 
             clock2 = time.time()
-
-            print('| Epoch {:3d}, time={:5.1f}ms/{:5.1f}ms | Train: loss={:.3f}, acc={:5.1f}% |'.format(e + 1,
-                                                                                                        1000 * self.sbatch * (
-                                                                                                            clock1 - clock0) / train_data_loader.__len__(),
-                                                                                                        1000 * self.sbatch * (
-                                                                                                            clock2 - clock1) / train_data_loader.__len__(),
-                                                                                                        train_loss,
-                                                                                                        100 * train_acc),
-              end='')
+            dataset_size = len(train_data_loader.dataset)
+            print('| Epoch {:3d}, time={:5.1f}ms/{:5.1f}ms | Train-Val: loss={:.3f}, acc={:5.1f}, f1={:5.1f}, cohen_kappa={:5.1f}%|'.format(
+                e + 1,
+                1000 * self.sbatch * (
+                    clock1 - clock0) / dataset_size,
+                1000 * self.sbatch * (
+                    clock2 - clock1) / dataset_size,
+                train_loss,
+                100 * train_acc,
+                100 * train_f1,
+                100 * train_cohen_kappa),
+            end='')
 
             # Valid
-            valid_loss, valid_acc, valid_recall, valid_f1 = self.eval_withregx(t, val_data_loader)
-            print(' Valid: loss={:.3f}, acc={:5.1f}% |'.format(valid_loss, 100 * valid_acc), end='')
+
+            valid_loss, valid_acc, valid_recall, valid_f1, valid_cohen_kappa = self.eval_withregx(t, test_data_loader )
+            print(' Test: loss={:.3f}, acc={:5.1f}, f1={:5.1f}, cohen_kappa={:5.1f}%|'.format(valid_loss, 100 * valid_acc, 100 * valid_f1,100 * valid_cohen_kappa),
+                  end='')
 
             # Adapt lr
             if valid_loss<best_loss:
@@ -148,8 +161,8 @@ class Appr(object):
 
                 fisher_old[n]=self.fisher[n].clone()
 
-            print('DataTime OldLast', datetime.now() - startDateTimeOldLast)
-            print("Analysis compute memory waste in Old Task")
+            #print('DataTime OldLast', datetime.now() - startDateTimeOldLast)
+            #print("Analysis compute memory waste in Old Task")
 
         # self.fisher=utils.fisher_matrix_diag(t,xtrain,ytrain,self.model,self.criterion)
         self.fisher = utils.fisher_matrix_diag_nlp(t, train_data_loader, self.model, self.criterion, opt=self.opt )
@@ -162,6 +175,16 @@ class Appr(object):
                 #self.fisher[n]=0.5*(self.fisher[n]+fisher_old[n])
             print("Analysis compute memory waste")
             print('DataTime OldLast', datetime.now() - startDateTime)
+
+        print(" ###### Show status of last layer weight in current task(domain) ########")
+        toViewLasLayer = []
+        for name, var in self.model.named_parameters():
+            if name.find("model.last.") != -1:
+                print("Requiere Grand ==> " + str(var.requires_grad))
+                print("Variable name " + name + " == " + str(var.data))
+
+                toViewLasLayer.append((name, var))
+
         return
 
     def trainewc(self,t,xtrain,ytrain,xvalid,yvalid):
@@ -232,6 +255,10 @@ class Appr(object):
         # r = torch.LongTensor(r).cuda()
 
         # Loop batches
+        loop_size = 0
+        global_step = 0
+        n_correct, n_total, loss_total = 0, 0, 0
+
         for i_batch, sample_batched in enumerate(train_data_loader):
             self.optimizer.zero_grad()
 
@@ -261,6 +288,17 @@ class Appr(object):
             self.optimizer.zero_grad()
             loss.backward()
             torch.nn.utils.clip_grad_norm_(self.model.parameters(),self.clipgrad)
+
+            n_correct += (torch.argmax(output, -1) == targets).sum().item()
+            n_total += len(output)
+            loss_total += loss.item() * len(outputs)
+            if global_step % self.opt.log_step == 0:
+                # train_acc = n_correct / n_total
+                train_loss = loss_total / n_total
+                # print('loss: {:.4f}, acc: {:.4f}'.format(train_loss, train_acc))
+                print('loss: {:.4f}'.format(train_loss))
+
+
             self.optimizer.step()
 
         return
@@ -298,6 +336,7 @@ class Appr(object):
         total_loss = 0
         total_acc = 0
         total_num = 0
+
         self.model.eval()
 
         total_reg = 0
@@ -321,8 +360,8 @@ class Appr(object):
 
             startDateTime = datetime.now()
             outputs,_ = self.model.forward( task, inputs)
-            print('Eval DataTime', datetime.now() - startDateTime)
-            print ("Eval forward")
+            #print('Eval DataTime', datetime.now() - startDateTime)
+            #print ("Eval forward")
             self.getMemoryRam()
 
             output = outputs[t]
@@ -330,10 +369,13 @@ class Appr(object):
             _, pred = output.max(1)
             hits = (pred == targets).float()
 
+            n_correct += (torch.argmax(output, -1) == targets).sum().item()
+
             # Log
-            total_loss += loss.data.cpu().numpy() * sample_batched.__len__()
+            current_batch_size = len(pred)
+            total_loss += loss.data.cpu().numpy() * current_batch_size
             total_acc += hits.sum().data.cpu().numpy()
-            total_num += sample_batched.__len__()
+            total_num += current_batch_size
 
             if t_targets_all is None:
                 t_targets_all = targets.detach().numpy()
@@ -347,7 +389,10 @@ class Appr(object):
                               average='macro')
         recall = metrics.recall_score(t_targets_all, np.argmax(t_outputs_all, -1), labels=[0, 1, 2],
                                       average='macro')
-        return total_loss / total_num, total_acc / total_num, recall, f1
+
+        cohen_kappa = metrics.cohen_kappa_score(t_targets_all, np.argmax(t_outputs_all, -1))
+
+        return total_loss / total_num, total_acc / total_num, recall, f1,cohen_kappa
 
 
     def eval(self, t, val_data_loader):
@@ -391,35 +436,39 @@ class Appr(object):
             for (name,param),(_,param_old) in zip(self.model.named_parameters(),self.model_old.named_parameters()):
 
                 loss_reg+=torch.sum(self.fisher[name]*(param_old-param).pow(2))/2
-            print('DataTime OldLast', datetime.now() - startDateTimeOldLast)
-            print("Compute loss for last model")
+            #print('DataTime OldLast', datetime.now() - startDateTimeOldLast)
+            #print("Compute loss for last model")
 
-        print("Compute loss function")
+        #print("Compute loss function")
         return self.ce(output,targets)+self.lamb*loss_reg
 
-
-    #Serialize model, optimizer and other parameters to file
     def saveModel(self, topath):
-         torch.save({
-                'epoch': self.nepochs,
-                'model_state_dict': self.model.state_dict(),
-                'optimizer_state_dict': self.optimizer.state_dict(),
-                'loss': self.ce,
-                'learning_rate': self.lr,
-                'batch':self.sbatch
-            }, topath)
+        torch.save({
+            'epoch': self.nepochs,
+            'model_state_dict': self.model.get_Model().state_dict(),
+            'optimizer_state_dict': self.optimizer.state_dict(),
+            'loss': self.ce,
+            'learning_rate': self.lr,
+            'batch': self.sbatch,
+            'task_size': self.task_size
+        }, topath)
 
-         return True
+        return True
 
 
-    #Unserialize model, optimizer and other parameters from file
+
+        # Unserialize model, optimizer and other parameters from file
+
     def loadModel(self, frompath):
-
         if not os.path.exists(frompath):
             return False
         else:
             checkpoint = torch.load(frompath)
-            self.model.load_state_dict(checkpoint['model_state_dict'])
+            self.model.get_Model().load_state_dict(checkpoint['model_state_dict'])
+
+            self.optimizer = self.opt.optimizer(filter(lambda p: p.requires_grad, self.model.parameters()),
+                                                lr=self.opt.learning_rate, weight_decay=self.opt.l2reg)
+
             self.optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
             self.ce = checkpoint['loss']
             return True
@@ -429,4 +478,4 @@ class Appr(object):
         pid = os.getpid()
         py = psutil.Process(pid)
         memoryUse = py.memory_info()[0] / 2. ** 30  # memory use in GB...I think
-        print('memory use:', memoryUse)
+        #print('memory use:', memoryUse)

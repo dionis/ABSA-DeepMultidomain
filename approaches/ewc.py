@@ -22,6 +22,9 @@ class Appr(object):
         self.lr_patience=lr_patience
         self.clipgrad=clipgrad
 
+        if self.model != None:
+            self.task_size = 1 if self.model.taskcla == None else len(self.model.taskcla)
+
         self.ce=torch.nn.CrossEntropyLoss()
         self.optimizer=self._get_optimizer()
         self.lamb=lamb                      # Grid search = [500,1000,2000,5000,10000,20000,50000]; best was 5000
