@@ -1,8 +1,24 @@
-# ABSA-DeepMultidomain
+# Lifelong Learning of Aspects (LLA)
 
 > Aspect Based Sentiment Analysis, PyTorch Implementations.
 >
-* https://github.com/ZhengZixiang/ABSAPapers
+*  a hybrid model that combines the continual and deep learning approaches for Aspect Sentiment Clasification.
+
+   First, a text preprocess module extracts the
+   aspect word candidates (i.e., noun, adverbs) and the
+   proposed model classiϐies each aspect into one of
+   three possible classes: positive, negative, or neutral.
+
+   The model starts from a Bidirectional Encoder 
+   Representations from Transformers (BERT) model and
+   improves the Continual Learning (CL) disadvantages based on:
+
+   - Combining a CL regularization approach in NLP (i.e.,
+ABSA) with a gradient descent modiϐication algorithm to preserve relevant weights in a CL scenario.
+
+   - Using the output of a pretrained BERT model to
+improve the results and tune the BERT model on the
+CL process.
 
 ![LICENSE](https://img.shields.io/packagist/l/doctrine/orm.svg)
 ![Contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)
@@ -19,9 +35,6 @@
 * python 3.6 / 3.7
 
 * python 3.6 / 3.7
-* GloVe pre-trained word vectors (See [data_utils.py](./data_utils.py) for more detail)
-  * Download pre-trained word vectors [here](https://github.com/stanfordnlp/GloVe#download-pre-trained-word-vectors),
-  * extract the [glove.twitter.27B.zip](http://nlp.stanford.edu/data/wordvecs/glove.twitter.27B.zip) and [glove.42B.300d.zip](http://nlp.stanford.edu/data/wordvecs/glove.42B.300d.zip) to the root directory
 * pytorch-pretrained-bert 0.6.1
   * See [pytorch-pretrained-BERT](https://github.com/huggingface/pytorch-pretrained-BERT) for more detail.
   Note: BERT multilingual name "bert-base-multilingual-uncased"
@@ -48,7 +61,21 @@ Please refer to [infer_example.py](./infer_example.py).
 * BERT-based models are more sensitive to hyperparameters (especially learning rate) on small data sets, see [this issue](https://github.com/songyouwei/ABSA-PyTorch/issues/27).
 * Fine-tuning on the specific task is necessary for releasing the true power of BERT.
 
-## BERT-based models
+## Notes
+
+Dionis López's Phd research with: sources code ([LifelongABSA.py](./models/LifelongABSA.py)) for training a deep and lifelong model and article ["A model of continual and deep learning for aspect based in sentiment analysis"](https://sciendo.com/pdf/10.14313/jamris/1-2023/1), Journal of Automation, Mobile Robotics and Intelligent Systems 17 (1), 3-12.
+
+Thesis and Phd on [documentation](./documentation/) directory:
+
+- Phd dissertation (Spanish) [defensaPhD.pdf](./documentation/defensaPhD.pdf)
+
+- Phd Thesis (Spanish) [defensaPhD.pdf](./documentation/Thesis.pdf)
+
+- Paper in Journal publication ["A model of continual and deep learning for aspect based in sentiment analysis"](./documentation/A_model_of_continual_and_deep_learning_for_aspect.pdf.pdf)
+
+There are other models for training evaluation results, such as:
+
+
 
 ### AEN-BERT ([aen.py](./models/aen.py))
 Song, Youwei, et al. "Attentional Encoder Network for Targeted Sentiment Classification." arXiv preprint arXiv:1902.09314 (2019). [[pdf]](https://arxiv.org/pdf/1902.09314.pdf)
@@ -124,6 +151,11 @@ Tang, Duyu, et al. "Effective LSTMs for Target-Dependent Sentiment Classificatio
 Zhang, Lei, Shuai Wang, and Bing Liu. "Deep Learning for Sentiment Analysis: A Survey." arXiv preprint arXiv:1801.07883 (2018). [[pdf]](https://arxiv.org/pdf/1801.07883)
 
 Young, Tom, et al. "Recent trends in deep learning based natural language processing." arXiv preprint arXiv:1708.02709 (2017). [[pdf]](https://arxiv.org/pdf/1708.02709)
+
+Young, Tom, et al. "Recent trends in deep learning based natural language processing." arXiv preprint arXiv:1708.02709 (2017). [[pdf]](https://arxiv.org/pdf/1708.02709)
+
+Biesialska M., et al. “Continual lifelong learning in natural language processing: A survey”, Proceedings of the 28th
+International Conference on Computational Linguistics, 2020, pp. 6523–6541 [[pdf]](https://upcommons.upc.edu/bitstream/handle/2117/341126/Continual?sequence=3)
 
 ## Contributions
 
