@@ -5,9 +5,7 @@
 *  A hybrid model that combines the continual and deep learning approaches for Aspect Sentiment Clasification.
 
    First, a text preprocess module extracts the
-   aspect word candidates (i.e., noun, adverbs) and the
-   proposed model classiϐies each aspect into one of
-   three possible classes: positive, negative, or neutral.
+   aspect word candidates (i.e., noun, adverbs) and the  proposed model classifies each aspect into one of three possible classes: positive, negative, or neutral.
 
    The model starts from a Bidirectional Encoder 
    Representations from Transformers (BERT) model and
