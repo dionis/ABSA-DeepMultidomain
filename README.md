@@ -2,7 +2,7 @@
 
 > Aspect Based Sentiment Analysis, PyTorch Implementations.
 >
-*  a hybrid model that combines the continual and deep learning approaches for Aspect Sentiment Clasification.
+*  A hybrid model that combines the continual and deep learning approaches for Aspect Sentiment Clasification.
 
    First, a text preprocess module extracts the
    aspect word candidates (i.e., noun, adverbs) and the
@@ -48,8 +48,6 @@ python train.py --model_name mgan --dataset twitter
 ```
 
 See [train.py](./train.py) for more training arguments.
-
-Refer to [train_k_fold_cross_val.py](./train_k_fold_cross_val.py) for k-fold cross validation support.
 
 ### Inference
 
